@@ -1,9 +1,8 @@
 # GenericCellularAutomata
 
 Rules for wire world
-'''
-{
-	"initial_state": [
+```
+"initial_state": [
 		{"x": 0, "y": 0, "state": "tail"},
 		{"x": 1, "y": 0, "state": "head"},
 		{"x": 2, "y": 0, "state": "wire"},
@@ -37,4 +36,4 @@ Rules for wire world
     }
   }
 }
-'''
+```
