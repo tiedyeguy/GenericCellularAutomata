@@ -1,6 +1,7 @@
 # GenericCellularAutomata
 
 Rules for wire world
+'''
 {
 	"initial_state": [
 		{"x": 0, "y": 0, "state": "tail"},
@@ -36,3 +37,4 @@ Rules for wire world
     }
   }
 }
+'''
