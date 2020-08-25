@@ -1,4 +1,9 @@
+import java.io.IOException;
 import java.util.Map;
+
+import com.google.gson.stream.JsonReader;
+
+
 
 /**
  * This is a rule for 2 and 3 dimensional grids
@@ -6,8 +11,15 @@ import java.util.Map;
 public class ComplexRule extends Rule {
 	private Map<State, Range> stateThresholds;
 
-	public ComplexRule(State  st, String thresholds) {
-		
+	public ComplexRule(JsonReader rule) {
+		try {
+			while(rule.hasNext()) {
+				System.out.println(rule.peek());
+				rule.skipValue();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
