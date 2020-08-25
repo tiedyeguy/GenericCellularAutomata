@@ -11,11 +11,12 @@ Rules for wire world
 	], 
   "type": "M",
   "dimensions": 2,
+  "wrap": "true",
   "empty": {
     "color": "black",
-		"wire": {
-			"wire": "2/4"
-		}
+    "wire": {
+	"wire": "2/4"
+     }
   },
   "wire": {
     "color": "yellow",
