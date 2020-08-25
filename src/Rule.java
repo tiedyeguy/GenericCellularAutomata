@@ -10,7 +10,7 @@ public abstract class Rule {
 	 * @param neighbors - The number of each type of cell neighboring the one you are applying this rule to
 	 * @return - true if the rule can be applied validly, false if the rule can't be applied to the cell
 	 */
-	public abstract boolean isTrue(Map<State, Integer> neighbors);
+	public abstract boolean isTrue(Map<State, Number> neighbors);
 	
 	/**
 	 * The state that the cell should transition to if this rule isTrue
