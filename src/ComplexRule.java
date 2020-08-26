@@ -1,5 +1,7 @@
 import java.util.Map;
+import java.util.Map.Entry;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 
@@ -9,11 +11,25 @@ import com.google.gson.JsonObject;
  */
 public class ComplexRule extends Rule {
 	private Map<State, Range> stateThresholds;
-
-	public ComplexRule(JsonObject ruleObject) {
-//		for(Entry<String, > rule : ruleObject) {
-//			
-//		}
+	private State nextState;
+	
+	public ComplexRule(JsonObject ruleObject, State nextState) {
+		this.nextState = nextState;
+		
+		for(Entry<String, JsonElement> threshold: ruleObject.entrySet()) {
+			String thresholdName = threshold.getKey();
+			State ruleState = State.getState(thresholdName);
+			if(ruleState != null)
+				stateThresholds.put(ruleState, new Range(threshold.getValue().getAsString()));
+			else if(thresholdName.equalsIgnoreCase("any")) {
+				//TODO: FIX BAD LOGIC
+				Range validRange = new Range(threshold.getValue().getAsString());
+				State.getAllStates().forEach((state)->stateThresholds.put(state, validRange));
+			} else {
+				System.err.println("THERE WAS A PROBLEM, RULE " + thresholdName + " : "+ threshold.getValue().getAsString() 
+						+ " DOES NOT REFERENCE VALID STATE");
+			}
+		}
 	}
 
 	
@@ -28,6 +44,6 @@ public class ComplexRule extends Rule {
 
 	@Override
 	public State getState() {
-		return null;
+		return nextState;
 	}
 }

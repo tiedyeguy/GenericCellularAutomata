@@ -16,17 +16,22 @@ public class Ruleset {
 
 	private Ruleset(JsonObject ruleset) {
 		rulesets = new HashMap<State, ArrayList<Rule>>();
-		Map<String, State> states = new HashMap<String, State>();
+		State.addAllStates(ruleset.keySet());
 		
-		for(Entry<String, JsonElement> entry : ruleset.entrySet()) {
+		for(Entry<String, JsonElement> stateEntry : ruleset.entrySet()) {
 			ArrayList<Rule> entryRules = new ArrayList<Rule>();
-			for(Entry<String, JsonElement> subEntry : entry.getValue().getAsJsonObject().entrySet()) {
-				if(!subEntry.getKey().equals("color")) {
-					entryRules.add(new ComplexRule(subEntry.getValue().getAsJsonObject()));
+			State currentState = State.getState(stateEntry.getKey());
+			for(Entry<String, JsonElement> stateAttribute : stateEntry.getValue().getAsJsonObject().entrySet()) {
+				if(stateAttribute.getKey().equals("color")) {
+					currentState.setColor(stateAttribute.getValue().getAsString());
+				} else if(stateAttribute.getKey().equals("hotkey")) {
+					currentState.setHotkey(stateAttribute.getValue().getAsString().charAt(0));
+				} else {
+					entryRules.add(new ComplexRule(stateAttribute.getValue().getAsJsonObject(), State.getState(stateAttribute.getKey())));					
 				}
 			}
-			states.put(entry.getKey(), new State());
-			rulesets.put(states.get(entry.getKey()), entryRules);
+			
+			rulesets.put(currentState, entryRules);
 		}
 	}
 	
