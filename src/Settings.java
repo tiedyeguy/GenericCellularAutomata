@@ -1,17 +1,17 @@
 
 public class Settings {
-	private static boolean wrap;
+	private static boolean wrapping;
 	private static int dimension;
 	private static NeighborType neighborType;
 	
-	public static void init(boolean wrap, int dimension, NeighborType neighborType) {
-		Settings.wrap = wrap;
+	public static void init(boolean wrapping, int dimension, NeighborType neighborType) {
+		Settings.wrapping = wrapping;
 		Settings.dimension = dimension;
 		Settings.neighborType = neighborType;
 	}
 	
-	public static boolean isWrap() {
-		return wrap;
+	public static boolean isWrapping() {
+		return wrapping;
 	}
 	
 	public static int getDimension() {

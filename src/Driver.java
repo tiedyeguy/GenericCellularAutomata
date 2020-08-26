@@ -16,6 +16,8 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
+		Settings.init(true, 3, NeighborType.NEUMANN);
+		
 		camera = new PeasyCam(this, 200);
 		
 		grid = new Grid(3, 3, 3);

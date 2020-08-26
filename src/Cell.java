@@ -1,3 +1,5 @@
+import java.util.List;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -29,8 +31,7 @@ public class Cell {
 	 * Prepares the next state of the cell, based on its state, neighbors, and rules
 	 */
 	public void prepareNextState() {
-		// TODO Auto-generated method stub
-		
+		List<Rule> ruleset = Ruleset.getRulesFor(state);
 	}
 
 	/**
