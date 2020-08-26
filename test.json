@@ -29,31 +29,33 @@
   "type": "M",
   "dimensions": 2,
   "wrap": "true",
-  "empty": {
-    "color": "black",
-    "wire": {
-      "wire": "2"
-    }
-  },
-  "wire": {
-    "color": "yellow",
-    "head": {
-      "head": "1"
-    },
-    "empty": {
-      "wire": "8"
-    }
-  },
-  "head": {
-    "color": "blue",
-    "tail": {
-      "any": "0-8"
-    }
-  },
-  "tail": {
-    "color": "red",
-    "wire": {
-      "any": "0-8"
-    }
-  }
+  "rules": {
+	  "empty": {
+	    "color": "black",
+	    "wire": {
+	      "wire": "2"
+	    }
+	  },
+	  "wire": {
+	    "color": "yellow",
+	    "head": {
+	      "head": "1"
+	    },
+	    "empty": {
+	      "wire": "8"
+	    }
+	  },
+	  "head": {
+	    "color": "blue",
+	    "tail": {
+	      "any": "0-8"
+	    }
+	  },
+	  "tail": {
+	    "color": "red",
+	    "wire": {
+	      "any": "0-8"
+	    }
+	  }
+	}
 }
