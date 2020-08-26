@@ -20,7 +20,7 @@ public class Rule1D extends Rule {
 	}
 
 	@Override
-	public boolean isTrue(Map<State, Integer> neighbors) {
+	public boolean isTrue(Map<State, Number> neighbors) {
 		return false;
 	}
 
