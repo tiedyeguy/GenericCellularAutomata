@@ -2,6 +2,9 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 
+/**
+ * Holds all cells and has methods that correspond to cell methods, to call of them at once
+ */
 public class Grid {
 
 	private Cell[][][] cells;
@@ -33,13 +36,24 @@ public class Grid {
 				for (int x = 0; x < cells[z][y].length; x++)
 					cells[z][y][x] = new Cell();
 
-		for (int z = 0; z < cells.length; z++)
-			for (int y = 0; y < cells[z].length; y++)
-				for (int x = 0; x < cells[z][y].length; x++)
-					cells[z][y][x] = new Cell(getNeighbors(x, y, z));
+		for (int z = 0; z < cells.length; z++) {
+			for (int y = 0; y < cells[z].length; y++) {
+				for (int x = 0; x < cells[z][y].length; x++) {
+					cells[z][y][x] = new Cell(getNeighbors(x, y, z), new State("default"));
+				}
+			}
+		}
 
 	}
 
+	/**
+	 * Gets the neighbors for the cell at the given location, 
+	 * based on whether the grid is wrapping and the neighbor type
+	 * @param x location of the cell to get neighbors for
+	 * @param y location of the cell to get neighbors for
+	 * @param z location of the cell to get neighbors for
+	 * @return an array of neighbors (cells) to the given coordinates, 
+	 */
 	private Cell[] getNeighbors(int cellX, int cellY, int cellZ) {
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 
@@ -70,8 +84,7 @@ public class Grid {
 				neighbors.add(cells[cellZ][Math.floorMod(cellY + 1, cells[0].length)][cellX]);
 				neighbors.add(cells[cellZ][cellY][Math.floorMod(cellX - 1, cells[0][0].length)]);
 				neighbors.add(cells[cellZ][cellY][Math.floorMod(cellX + 1, cells[0][0].length)]);
-			}
-			else {
+			} else {
 				if (cellZ - 1 >= 0)
 					neighbors.add(cells[cellZ - 1][cellY][cellX]);
 				if (cellZ + 1 < cells.length)

@@ -5,6 +5,9 @@ import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+/**
+ * Represents a single cell - has a state, updates itself, and is drawable
+ */
 public class Cell {
 	private static PVector size;
 	private Cell[] neighbors;
@@ -14,8 +17,9 @@ public class Cell {
 	public Cell() {
 	}
 
-	public Cell(Cell[] neighbors) {
+	public Cell(Cell[] neighbors, State state) {
 		this.neighbors = neighbors;
+		this.state = state;
 	}
 
 	public void setNeighbors(Cell[] neighbors) {
@@ -79,6 +83,12 @@ public class Cell {
 	 * @param sketch to draw to
 	 */
 	public void draw(PApplet sketch) {
+		sketch.fill(state.getRed(), state.getGreen(), state.getBlue());
+		
+		if(Settings.getDimension() == Dimension.TWO_TIME) {
+			sketch.noFill();
+		}
+		
 		sketch.box(Cell.getSize().x, Cell.getSize().y, Cell.getSize().z);
 	}
 }

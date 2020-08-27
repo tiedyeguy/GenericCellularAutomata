@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 public class State {
 	private static Map<String, State> states = new HashMap<String, State>();
 	private String name;
-	private int color;
+	private int red, green, blue;
 	private char hotkey; 
 	
 	/**
@@ -38,10 +39,28 @@ public class State {
 		return states.get(stateName);
 	}
 	
+	/**
+	 * Gets the state associated with the given hotkey
+	 * @param hotkey
+	 * @return State object, null if there is no state for given hotkey
+	 */
+	public static State getStateFromHotkey(char hotkey) {
+		List<State> allState = new ArrayList<State>();
+		
+		List<State> matchingState = allState.stream().filter((state) -> state.getHotkey() == hotkey).collect(Collectors.toList());
+	
+		if(matchingState.size() > 1) throw new IllegalStateException("Only one state should be associated with each hotkey");
+		else if(matchingState.size() == 0) return null;
+		
+		return matchingState.get(0);
+	}
+	
 	public State(String stateName) {
 		name = stateName;
 		hotkey = ' ';
-		color = 0;
+		red = 0;
+		green = 0;
+		blue = 0;
 	}
 
 	/**
@@ -61,11 +80,27 @@ public class State {
 	}
 	
 	/**
-	 * Gets the color associated with this state
-	 * @return - integer form of the color, base 16. Default 0
+	 * Gets the amount of red in the color associated with this state
+	 * @return - integer form of the color, one byte. Default 0
 	 */
-	public int getColor() {
-		return color;
+	public int getRed() {
+		return red;
+	}
+	
+	/**
+	 * Gets the amount of green in the color associated with this state
+	 * @return - integer form of the color, one byte. Default 0
+	 */
+	public int getGreen() {
+		return green;
+	}
+	
+	/**
+	 * Gets the amount of blue in the color associated with this state
+	 * @return - integer form of the color, one byte. Default 0
+	 */
+	public int getBlue() {
+		return blue;
 	}
 	
 	/**
@@ -73,7 +108,9 @@ public class State {
 	 * @param color - the color of this state
 	 */
 	public void setColor(String color) {
-		this.color = Integer.parseInt(color, 16);
+		red = Integer.parseInt(color.substring(0, 2), 16);
+		green = Integer.parseInt(color.substring(2, 4), 16);
+		blue = Integer.parseInt(color.substring(4, 6), 16);
 	}
 	
 	/**
