@@ -37,6 +37,10 @@ public class Cell {
 	public State getState() {
 		return state;
 	}
+	
+	public void setState(State state) {
+		this.state = state;
+	}
 
 	/**
 	 * Prepares the next state of the cell, based on its state, neighbors, and rules
@@ -85,7 +89,7 @@ public class Cell {
 	public void draw(PApplet sketch) {
 		sketch.fill(state.getRed(), state.getGreen(), state.getBlue());
 		
-		if(Settings.getDimension() == Dimension.TWO_TIME) {
+		if(Settings.getDimension() == Dimension.TWO_TIME && state.getName().contentEquals("default")) {
 			sketch.noFill();
 		}
 		

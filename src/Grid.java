@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 /**
  * Holds all cells and has methods that correspond to cell methods, to call of them at once
@@ -43,7 +44,6 @@ public class Grid {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -109,6 +109,14 @@ public class Grid {
 
 		return neighbors.toArray(arr);
 	}
+	
+	public void setCellStateAtPos(int x, int y, int z, State state) {
+		cells[z][y][x].setState(state);
+	}
+	
+	public void handleClick(int mouseX, int mouseY, State penState) {
+		System.out.println(mouseX + " " + mouseY);
+	}
 
 	/**
 	 * Prepares all of the cells states to be updated later (all cells must be
@@ -138,10 +146,17 @@ public class Grid {
 	 * @param sketch to draw to
 	 */
 	public void draw(PApplet sketch) {
+		PVector gridSize = new PVector(Cell.getSize().x * (cells[0][0].length - 1),
+				Cell.getSize().y * (cells[0].length - 1),
+				Cell.getSize().z * (cells.length - 1));
+		
+		sketch.stroke(255);
+		sketch.box(gridSize.x*2, gridSize.y*2, gridSize.z*2);
+		sketch.noStroke();
+		
 		sketch.pushMatrix();
 
-		sketch.translate(-Cell.getSize().x * (cells[0][0].length - 1) / 2,
-				-Cell.getSize().y * (cells[0].length - 1) / 2, -Cell.getSize().z * (cells.length - 1) / 2);
+		sketch.translate(-gridSize.x / 2, -gridSize.y / 2, -gridSize.z / 2);
 
 		for (int z = 0; z < cells.length; z++) {
 			for (int y = 0; y < cells[z].length; y++) {
