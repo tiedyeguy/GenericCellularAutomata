@@ -9,6 +9,7 @@ public class Range {
 	private ArrayList<Number> singles;
 	
 	public Range(String range) {
+		singles = new ArrayList<Number>();
 		ranges = new ArrayList<SubRange>();
 		while(range.length() > 0) {
 			int commaIndex = range.indexOf(",");

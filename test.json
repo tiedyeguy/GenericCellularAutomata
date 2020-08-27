@@ -31,13 +31,13 @@
   "wrap": "true",
   "rules": {
 	  "empty": {
-	    "color": "black",
+	    "color": "000000",
 	    "wire": {
 	      "wire": "2"
 	    }
 	  },
 	  "wire": {
-	    "color": "yellow",
+	    "color": "A000A0",
 	    "head": {
 	      "head": "1"
 	    },
@@ -46,13 +46,13 @@
 	    }
 	  },
 	  "head": {
-	    "color": "blue",
+	    "color": "0000FF",
 	    "tail": {
 	      "any": "0-8"
 	    }
 	  },
 	  "tail": {
-	    "color": "red",
+	    "color": "FF0000",
 	    "wire": {
 	      "any": "0-8"
 	    }

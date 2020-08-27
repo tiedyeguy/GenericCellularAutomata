@@ -1,9 +1,7 @@
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
+import processing.data.JSONObject;
 
 
 /**
@@ -13,20 +11,21 @@ public class ComplexRule extends Rule {
 	private Map<State, Range> stateThresholds;
 	private State nextState;
 	
-	public ComplexRule(JsonObject ruleObject, State nextState) {
+	public ComplexRule(JSONObject ruleObject, State nextState) {
 		this.nextState = nextState;
+		stateThresholds = new HashMap<State, Range>();
 		
-		for(Entry<String, JsonElement> threshold: ruleObject.entrySet()) {
-			String thresholdName = threshold.getKey();
+		for(Object threshold: ruleObject.keys()) {
+			String thresholdName = (String)threshold;
 			State ruleState = State.getState(thresholdName);
 			if(ruleState != null)
-				stateThresholds.put(ruleState, new Range(threshold.getValue().getAsString()));
+				stateThresholds.put(ruleState, new Range(ruleObject.getString(thresholdName)));
 			else if(thresholdName.equalsIgnoreCase("any")) {
 				//TODO: FIX BAD LOGIC
-				Range validRange = new Range(threshold.getValue().getAsString());
+				Range validRange = new Range(ruleObject.getString(thresholdName));
 				State.getAllStates().forEach((state)->stateThresholds.put(state, validRange));
 			} else {
-				System.err.println("THERE WAS A PROBLEM, RULE " + thresholdName + " : "+ threshold.getValue().getAsString() 
+				System.err.println("THERE WAS A PROBLEM, RULE " + thresholdName + " : "+ ruleObject.getString(thresholdName) 
 						+ " DOES NOT REFERENCE VALID STATE");
 			}
 		}
