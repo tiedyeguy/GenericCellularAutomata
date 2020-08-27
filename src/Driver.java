@@ -62,9 +62,9 @@ public class Driver extends PApplet {
 
 	public void mouseDown() {
 		if (userDrawing) {
-			if(mouseButton == LEFT)
-			grid.handleClick(mouseX, mouseY, penState);
-			else if(mouseButton == RIGHT)
+			if (mouseButton == LEFT)
+				grid.handleClick(mouseX, mouseY, penState);
+			else if (mouseButton == RIGHT)
 				grid.handleClick(mouseX, mouseY, State.getState("default"));
 		}
 	}

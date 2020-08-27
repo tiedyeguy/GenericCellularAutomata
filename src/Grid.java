@@ -110,12 +110,25 @@ public class Grid {
 		return neighbors.toArray(arr);
 	}
 	
+	/**
+	 * Sets the state of a cell at specified position
+	 * @param x position in grid
+	 * @param y position in grid
+	 * @param z position in grid
+	 * @param state to set the specified cell to
+	 */
 	public void setCellStateAtPos(int x, int y, int z, State state) {
 		cells[z][y][x].setState(state);
 	}
 	
+	/**
+	 * Draws the cell at the position corresponding to the mouse position as the specified state
+	 * @param x position of the mouse
+	 * @param y position of the mouse
+	 * @param state to draw
+	 */
 	public void handleClick(int mouseX, int mouseY, State penState) {
-		System.out.println(mouseX + " " + mouseY);
+		cells[0][Math.round(mouseY / Cell.getSize().y)][Math.round(mouseX / Cell.getSize().x)].setState(penState);
 	}
 
 	/**
