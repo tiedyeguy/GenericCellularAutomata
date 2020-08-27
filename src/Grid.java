@@ -105,11 +105,12 @@ public class Grid {
 			}
 		}
 
-//		ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
-//		justMeList.add(cells[cellZ][cellY][cellX]);
-//
-//		neighbors.removeAll(justMeList);
-		neighbors = neighbors.stream().distinct().collect(Collectors.toList());
+		neighbors = neighbors.stream().distinct().collect(Collectors.toList()); //Remove duplicates
+
+		ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
+		justMeList.add(cells[cellZ][cellY][cellX]);
+
+		neighbors.removeAll(justMeList); //Remove Cell itself
 
 		Cell[] arr = new Cell[neighbors.size()];
 
