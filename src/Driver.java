@@ -1,6 +1,10 @@
+import java.io.File;
+
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PVector;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
 /**
  * Handles drawing and drives the program
@@ -21,16 +25,17 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		// TODO: replace grid dimensions and settings initialization with what's given
-		// by the json; update cell size accordingly
-		grid = new Grid(2, 3, 4);
-		Settings.init(true, Dimension.TWO, NeighborType.NEUMANN);
+		JSONArray init_state = Settings.init(new File("test.json")); //TODO: Allow user to pick file
+		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
+		
+		int i = 0;
+		JSONObject initCell = init_state.getJSONObject(i);
+		while(initCell != null) {
+			grid.setCellStateAtPos(initCell.getInt("x"), initCell.getInt("y"), initCell.getInt("z"), State.getState(initCell.getString("state")));
+		}
+		
 		Cell.setSize(new PVector(400, 800 / 3f, 1));
 		// penState should initially be set to the first state (not the default state)
-		// set up ruleset
-
-		// TODO: fill in initial states according to json
-
 		camera = new PeasyCam(this, 200);
 		camera.setActive(Settings.getDimension() == Dimension.TWO_TIME || Settings.getDimension() == Dimension.THREE);
 		userDrawing = !camera.isActive();

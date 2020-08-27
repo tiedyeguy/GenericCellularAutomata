@@ -26,36 +26,40 @@
       "state": "wire"
     }
   ],
+  "size": {
+    "x": 15,
+    "y": 15
+  },
   "type": "M",
   "dimensions": 2,
-  "wrap": "true",
+  "wrap": true,
   "rules": {
-	  "empty": {
-	    "color": "000000",
-	    "wire": {
-	      "wire": "2"
-	    }
-	  },
-	  "wire": {
-	    "color": "A000A0",
-	    "head": {
-	      "head": "1"
-	    },
-	    "empty": {
-	      "wire": "8"
-	    }
-	  },
-	  "head": {
-	    "color": "0000FF",
-	    "tail": {
-	      "any": "0-8"
-	    }
-	  },
-	  "tail": {
-	    "color": "FF0000",
-	    "wire": {
-	      "any": "0-8"
-	    }
-	  }
-	}
+    "default": {
+      "color": "000000",
+      "wire": {
+        "wire": "2"
+      }
+    },
+    "wire": {
+      "color": "A000A0",
+      "head": {
+        "head": "1"
+      },
+      "default": {
+        "wire": "8"
+      }
+    },
+    "head": {
+      "color": "0000FF",
+      "tail": {
+        "any": "0-8"
+      }
+    },
+    "tail": {
+      "color": "FF0000",
+      "wire": {
+        "any": "0-8"
+      }
+    }
+  }
 }
