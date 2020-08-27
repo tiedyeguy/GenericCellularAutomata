@@ -1,31 +1,4 @@
 {
-  "initial_state": [
-    {
-      "x": 0,
-      "y": 0,
-      "state": "tail"
-    },
-    {
-      "x": 1,
-      "y": 0,
-      "state": "head"
-    },
-    {
-      "x": 2,
-      "y": 0,
-      "state": "wire"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "state": "wire"
-    },
-    {
-      "x": 4,
-      "y": 0,
-      "state": "wire"
-    }
-  ],
   "size": {
     "x": 15,
     "y": 15
@@ -36,29 +9,14 @@
   "rules": {
     "default": {
       "color": "000000",
-      "wire": {
-        "wire": "2"
+      "live": {
+        "live": "3"
       }
     },
-    "wire": {
-      "color": "A000A0",
-      "head": {
-        "head": "1"
-      },
+    "live": {
+      "color": "FFFFFF",
       "default": {
-        "wire": "8"
-      }
-    },
-    "head": {
-      "color": "0000FF",
-      "tail": {
-        "any": "0-8"
-      }
-    },
-    "tail": {
-      "color": "FF0000",
-      "wire": {
-        "any": "0-8"
+        "live": "0-1,4-8"
       }
     }
   }

@@ -35,9 +35,9 @@ public class ComplexRule extends Rule {
 	@Override
 	public boolean isTrue(Map<State, Number> neighbors) {
 		for(State discreteState : stateThresholds.keySet()) {
-			if(!stateThresholds.get(discreteState).contains(neighbors.get(discreteState)))
+			if(!stateThresholds.get(discreteState).contains(neighbors.getOrDefault(discreteState, 0)))
 				return false;
-		};
+		}
 		return true;
 	}
 

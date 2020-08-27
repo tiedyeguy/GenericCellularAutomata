@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import processing.core.PApplet;
 import processing.core.PVector;
 
 /**
- * Holds all cells and has methods that correspond to cell methods, to call of them at once
+ * Holds all cells and has methods that correspond to cell methods, to call of
+ * them at once
  */
 public class Grid {
 
@@ -40,22 +43,24 @@ public class Grid {
 		for (int z = 0; z < cells.length; z++) {
 			for (int y = 0; y < cells[z].length; y++) {
 				for (int x = 0; x < cells[z][y].length; x++) {
-					cells[z][y][x] = new Cell(getNeighbors(x, y, z), new State("default"));
+					cells[z][y][x].setNeighbors(getNeighbors(x, y, z));
+					cells[z][y][x].setState(State.getState("default"));
 				}
 			}
 		}
 	}
 
 	/**
-	 * Gets the neighbors for the cell at the given location, 
-	 * based on whether the grid is wrapping and the neighbor type
+	 * Gets the neighbors for the cell at the given location, based on whether the
+	 * grid is wrapping and the neighbor type
+	 * 
 	 * @param x location of the cell to get neighbors for
 	 * @param y location of the cell to get neighbors for
 	 * @param z location of the cell to get neighbors for
-	 * @return an array of neighbors (cells) to the given coordinates, 
+	 * @return an array of neighbors (cells) to the given coordinates,
 	 */
 	private Cell[] getNeighbors(int cellX, int cellY, int cellZ) {
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+		List<Cell> neighbors = new ArrayList<Cell>();
 
 		if (Settings.getNeighborType() == NeighborType.MOORE) {
 			neighbors = new ArrayList<Cell>(27);
@@ -100,35 +105,42 @@ public class Grid {
 			}
 		}
 
-		ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
-		justMeList.add(cells[cellZ][cellY][cellX]);
-
-		neighbors.removeAll(justMeList);
+//		ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
+//		justMeList.add(cells[cellZ][cellY][cellX]);
+//
+//		neighbors.removeAll(justMeList);
+		neighbors = neighbors.stream().distinct().collect(Collectors.toList());
 
 		Cell[] arr = new Cell[neighbors.size()];
 
 		return neighbors.toArray(arr);
 	}
-	
+
 	/**
 	 * Sets the state of a cell at specified position
-	 * @param x position in grid
-	 * @param y position in grid
-	 * @param z position in grid
+	 * 
+	 * @param x     position in grid
+	 * @param y     position in grid
+	 * @param z     position in grid
 	 * @param state to set the specified cell to
 	 */
 	public void setCellStateAtPos(int x, int y, int z, State state) {
 		cells[z][y][x].setState(state);
 	}
-	
+
 	/**
-	 * Draws the cell at the position corresponding to the mouse position as the specified state
-	 * @param x position of the mouse
-	 * @param y position of the mouse
+	 * Draws the cell at the position corresponding to the mouse position as the
+	 * specified state
+	 * 
+	 * @param x     position of the mouse
+	 * @param y     position of the mouse
 	 * @param state to draw
 	 */
 	public void handleClick(int mouseX, int mouseY, State penState) {
-		cells[0][Math.round(mouseY / Cell.getSize().y)][Math.round(mouseX / Cell.getSize().x)].setState(penState);
+		try {
+			cells[0][(int) Math.floor(mouseY / Cell.getSize().y)][(int) Math.floor(mouseX / Cell.getSize().x)].setState(penState);
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 	}
 
 	/**
@@ -160,16 +172,17 @@ public class Grid {
 	 */
 	public void draw(PApplet sketch) {
 		PVector gridSize = new PVector(Cell.getSize().x * (cells[0][0].length - 1),
-				Cell.getSize().y * (cells[0].length - 1),
-				Cell.getSize().z * (cells.length - 1));
-		
+				Cell.getSize().y * (cells[0].length - 1), Cell.getSize().z * (cells.length - 1));
+
 		sketch.stroke(255);
-		sketch.box(gridSize.x*2, gridSize.y*2, gridSize.z*2);
+//		sketch.box(gridSize.x*2, gridSize.y*2, gridSize.z*2);
+		sketch.rect(0, 0, sketch.width, sketch.height);
 		sketch.noStroke();
-		
+
 		sketch.pushMatrix();
 
-		sketch.translate(-gridSize.x / 2, -gridSize.y / 2, -gridSize.z / 2);
+//		sketch.translate(-gridSize.x , -gridSize.y , -gridSize.z );
+		sketch.translate(Cell.getSize().x / 2, Cell.getSize().y / 2);
 
 		for (int z = 0; z < cells.length; z++) {
 			for (int y = 0; y < cells[z].length; y++) {

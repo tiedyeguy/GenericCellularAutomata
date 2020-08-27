@@ -1,0 +1,52 @@
+{
+  "initial_state": [
+    {
+      "x": 0,
+      "y": 0,
+      "state": "tail"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "state": "head"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "state": "wire"
+    }
+  ],
+  "size": {
+    "x": 15,
+    "y": 15
+  },
+  "type": "M",
+  "dimensions": 2,
+  "wrap": true,
+  "rules": {
+    "default": {
+      "color": "000000",
+    },
+    "wire": {
+      "hotkey": "w",
+      "color": "A000A0",
+      "head": {
+        "head": "1,2"
+      },
+    },
+    "head": {
+      "hotkey": "h",
+      "color": "0000FF",
+      "tail": {
+        "any": "0-8"
+      }
+    },
+    "tail": {
+      "hotkey": "t",
+      "color": "FF0000",
+      "wire": {
+        "any": "0-8"
+      }
+    }
+  }
+}

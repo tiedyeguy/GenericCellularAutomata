@@ -39,7 +39,7 @@ public class Range {
 	 */
 	public boolean contains(Number number) {
 		return Stream.concat(ranges.stream().map((range)->range.contains(number)),
-							singles.stream().map((singleValid)->singleValid==number))
+							singles.stream().map((singleValid)->(boolean) (Math.round(singleValid.floatValue())==number.intValue())))
 					 .reduce((acc, next)->acc || next).orElseGet(()->false);
 	}
 		

@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +44,7 @@ public class State {
 	 * @return State object, null if there is no state for given hotkey
 	 */
 	public static State getStateFromHotkey(char hotkey) {
-		List<State> allState = new ArrayList<State>();
+		List<State> allState = State.getAllStates();
 		
 		List<State> matchingState = allState.stream().filter((state) -> state.getHotkey() == hotkey).collect(Collectors.toList());
 	

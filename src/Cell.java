@@ -12,15 +12,7 @@ public class Cell {
 	private static PVector size;
 	private Cell[] neighbors;
 	private State state;
-	private State nextState;
-
-	public Cell() {
-	}
-
-	public Cell(Cell[] neighbors, State state) {
-		this.neighbors = neighbors;
-		this.state = state;
-	}
+	private State nextState = State.getState("default");
 
 	public void setNeighbors(Cell[] neighbors) {
 		this.neighbors = neighbors;
@@ -40,6 +32,7 @@ public class Cell {
 	
 	public void setState(State state) {
 		this.state = state;
+		nextState = state;
 	}
 
 	/**
@@ -78,7 +71,7 @@ public class Cell {
 	 */
 	public void updateState() {
 		state = nextState;
-		nextState = null;
+//		nextState = null;
 	}
 
 	/**

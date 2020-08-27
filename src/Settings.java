@@ -39,7 +39,7 @@ public class Settings {
 			JSONObject automataObj = JSONObject.parse(jsonAsStr);
 
 			Ruleset.createRuleset(automataObj.getJSONObject("rules"));
-			Settings.wrapping = automataObj.getBoolean("wrapping");
+			Settings.wrapping = automataObj.getBoolean("wrap");
 			setDimension(automataObj.getString("dimensions", "2"));
 			setNeighborType(automataObj.getString("type", "M"));
 			JSONObject size = automataObj.getJSONObject("size");
