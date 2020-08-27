@@ -1,6 +1,9 @@
+import java.io.File;
+
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PVector;
+import processing.data.JSONArray;
 
 /**
  * Handles drawing and drives the program
@@ -21,10 +24,10 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		Settings.init(true, Dimension.TWO_TIME, NeighborType.NEUMANN);
+		JSONArray init_state = Settings.init(new File("test.json")); //TODO: Allow user to pick file
 		Cell.setSize(new PVector(20, 30, 40));
-
-		grid = new Grid(3, 3, 3);
+		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
+		init_state.
 		camera = new PeasyCam(this, 200);
 		userDrawing = true;
 
