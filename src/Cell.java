@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Stack;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -11,6 +12,11 @@ public class Cell {
 	private Cell[] neighbors;
 	private State state;
 	private State nextState = State.getState("default");
+	private Stack<State> pastStates;
+	
+	public Cell() {
+		pastStates = new Stack<State>();
+	}
 
 	public void setNeighbors(Cell[] neighbors) {
 		this.neighbors = neighbors;
@@ -58,8 +64,16 @@ public class Cell {
 	 * Updates the state of the cell with the prepared state
 	 */
 	public void updateState() {
+		pastStates.push(state);
 		state = nextState;
-//		nextState = null;
+	}
+	
+	/**
+	 * Reverts the cell to its previous state
+	 */
+	public void revert() {
+		nextState = state;
+		state = pastStates.pop();
 	}
 
 	/**

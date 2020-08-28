@@ -14,7 +14,9 @@ public class Driver extends PApplet {
 	Grid grid;
 	PeasyCam camera;
 	boolean userDrawing;
+	boolean paused;
 	State penState;
+	int speed = 1;
 
 	public static void main(String[] args) {
 		PApplet.main("Driver");
@@ -39,28 +41,36 @@ public class Driver extends PApplet {
 			}
 		}
 
-		// FIXME z should not always be one, y should sometimes be set manually (1d)
-		Cell.setSize(
-				new PVector((float) width / Settings.getXDimension(), (float) height / Settings.getYDimension(), 50));
+		float xCellSize = (float) width / Settings.getXDimension();
+		float yCellSize = (float) height / Settings.getYDimension();
+		float zCellSize = Settings.getDimension().isDrawn2D() ? 1 : (xCellSize + yCellSize) / 2;
+
+		Cell.setSize(new PVector(xCellSize, yCellSize, zCellSize));
 
 		penState = State.getAllStates().stream().filter((state) -> !state.getName().equals("default")).findAny().get();
 		userDrawing = Settings.getDimension().isDrawn2D();
+		paused = !userDrawing;
 
-		if (!userDrawing) {
-			// TODO generalize based on z (0.5 * zDim * cell size.z)
-			camera = new PeasyCam(this, width / 2, height / 2, 50 * 7.5, 60);
+		if (paused) {
+			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * zCellSize * Settings.getZDimension(), 1000);
 		}
 
-		// TODO adjustable speed
 		// TODO save initial state
-		// TODO clear grid
 		// TODO _TIME
 	}
 
 	public void draw() {
 		background(0);
 
-		if (!userDrawing) {
+		int framesPerTick;
+		if (speed == 0)
+			framesPerTick = 1;
+		else if (speed == 1)
+			framesPerTick = 4;
+		else
+			framesPerTick = 60;
+
+		if (!paused && !userDrawing && frameCount % framesPerTick == 0) {
 			grid.prepareAllStates();
 			grid.updateAllStates();
 		}
@@ -71,9 +81,9 @@ public class Driver extends PApplet {
 			fill(penState.getRed(), penState.getGreen(), penState.getBlue());
 
 			pushMatrix();
-			translate(mouseX, mouseY);
+			translate(mouseX, mouseY, Cell.getSize().x);
 			noStroke();
-			sphere(15);
+			circle(0, 0, 15);
 			popMatrix();
 		} else {
 			cursor();
@@ -98,8 +108,25 @@ public class Driver extends PApplet {
 	}
 
 	public void keyPressed() {
-		if (key == ' ' && Settings.getDimension().isDrawn2D()) {
-			userDrawing = !userDrawing;
+		if(key == DELETE) {
+			setup();
+		}
+		else if (key == ' ') {
+			if (Settings.getDimension().isDrawn2D())
+				userDrawing = !userDrawing;
+			else
+				paused = !paused;
+		} else if (key == CODED) {
+			if (keyCode == UP || keyCode == DOWN) {
+				speed = constrain(speed + (keyCode == UP ? -1 : 1), 0, 2);
+			}
+			else if(keyCode == RIGHT) {
+				grid.prepareAllStates();
+				grid.updateAllStates();
+			}
+			else if(keyCode == LEFT) {
+				grid.revert();
+			}
 		} else if (userDrawing) {
 			State newState = State.getStateFromHotkey(key);
 
