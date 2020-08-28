@@ -1,0 +1,23 @@
+{
+  "size": {
+    "x": 30,
+    "y": 30,
+  },
+  "type": "M",
+  "dimensions": 2,
+  "wrap": true,
+  "rules": {
+    "default": {
+      "color": "000000",
+      "live": {
+        "live": "3"
+      }
+    },
+    "live": {
+      "color": "FFFFFF",
+      "default": {
+        "live": "0-1,4-8"
+      }
+    }
+  }
+}

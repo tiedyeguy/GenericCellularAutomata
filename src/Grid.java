@@ -172,18 +172,16 @@ public class Grid {
 	 * @param sketch to draw to
 	 */
 	public void draw(PApplet sketch) {
-		PVector gridSize = new PVector(Cell.getSize().x * (cells[0][0].length - 1),
-				Cell.getSize().y * (cells[0].length - 1), Cell.getSize().z * (cells.length - 1));
-
-		sketch.stroke(255);
-//		sketch.box(gridSize.x*2, gridSize.y*2, gridSize.z*2);
-		sketch.rect(0, 0, sketch.width, sketch.height);
-		sketch.noStroke();
+//		PVector gridSize = new PVector(Cell.getSize().x * (cells[0][0].length - 1),
+//				Cell.getSize().y * (cells[0].length - 1), Cell.getSize().z * (cells.length - 1));
+//
+//		sketch.stroke(255);
+////		sketch.box(gridSize.x*2, gridSize.y*2, gridSize.z*2);
+//		sketch.rect(0, 0, sketch.width, sketch.height);
+		
+		sketch.stroke(0);
 
 		sketch.pushMatrix();
-
-//		sketch.translate(-gridSize.x , -gridSize.y , -gridSize.z );
-		sketch.translate(Cell.getSize().x / 2, Cell.getSize().y / 2);
 
 		for (int z = 0; z < cells.length; z++) {
 			for (int y = 0; y < cells[z].length; y++) {
