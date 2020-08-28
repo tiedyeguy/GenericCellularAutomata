@@ -1,3 +1,5 @@
+import processing.data.JSONObject;
+
 /**
  * Class that defines rules for any one dimensional automata
  */
@@ -23,13 +25,25 @@ public class Rule1D extends Rule {
 		for(int i = 0; i < neighbors.length; i++) {
 			stateNumber += (neighbors[i].getState().getName().equals("default") ? 0 : 1) * ((int)Math.pow(2, i));
 		}
-		int stateAcceptDigit = (rule>>(int)Math.pow(2, stateNumber))%2;
+		int stateAcceptDigit = (rule>>stateNumber)%2;
 		return stateAcceptDigit == 1;
 	}
 
 	@Override
 	public State getState() {
 		return null;
+	}
+
+	@Override
+	public JSONObject saveToJson() {
+		JSONObject jsonRule = new JSONObject();
+		jsonRule.setInt("rule", rule);
+		return jsonRule;
+	}
+
+	@Override
+	public void loadFromJSON(JSONObject jsonable) {
+		rule = jsonable.getInt("rule");
 	}
 	
 	

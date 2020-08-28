@@ -42,6 +42,15 @@ public class Range {
 							singles.stream().map((singleValid)->(boolean) (Math.round(singleValid.floatValue())==number.intValue())))
 					 .reduce((acc, next)->acc || next).orElseGet(()->false);
 	}
+	
+	@Override
+	public String toString() {
+		String stringRange = Stream.concat(ranges.stream().map((range)->range.toString()),
+				singles.stream().map((singleValid)->singleValid + ""))
+		 .reduce((acc, next)->acc + ", " + next).orElseGet(()->"");
+		
+		return stringRange.substring(0, stringRange.length() - 1);
+	}
 		
 	/**
 	 *	Defines a range with a minimum and maximum value (inclusive)
@@ -57,6 +66,11 @@ public class Range {
 		
 		public boolean contains(Number number) {
 			return number.doubleValue() <= max && number.doubleValue() >= min;
+		}
+		
+		@Override
+		public String toString() {
+			return min + "-" + max;
 		}
 	}
 }

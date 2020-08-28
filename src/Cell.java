@@ -37,7 +37,7 @@ public class Cell {
 	 * Prepares the next state of the cell, based on its state, neighbors, and rules
 	 */
 	public void prepareNextState() {
-		ArrayList<Rule> ruleset = Ruleset.getRuleset().getRulesFor(state);
+		ArrayList<Rule> ruleset = state.getRules();
 		
 		Rule firstTrueRule = null;
 

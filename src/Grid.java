@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import processing.core.PApplet;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
 /**
  * Holds all cells and has methods that correspond to cell methods, to call of
@@ -195,6 +197,29 @@ public class Grid {
 		}
 
 		sketch.popMatrix();
+	}
+
+	
+	
+	/**
+	 * Returns JSON array form of the grid in current configuration
+	 * @return - the JSONArray representation of this grid
+	 */
+	public JSONArray getJsonArray() {
+		JSONArray arr = new JSONArray();
+		for (int z = 0; z < cells.length; z++)
+			for (int y = 0; y < cells[z].length; y++)
+				for (int x = 0; x < cells[z][y].length; x++) {
+					if(!cells[z][y][x].getState().getName().equals("default")) {						
+						JSONObject cellObj = new JSONObject();
+						cellObj.setInt("x", x);
+						cellObj.setInt("y", y);
+						cellObj.setInt("z", z);
+						cellObj.setString("state", cells[z][y][x].getState().getName());
+					}
+				}
+					
+		return arr;
 	}
 
 }

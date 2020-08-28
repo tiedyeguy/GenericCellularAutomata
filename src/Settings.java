@@ -40,10 +40,11 @@ public class Settings {
 
 			JSONObject automataObj = JSONObject.parse(jsonAsStr);
 			try {
-				Ruleset.createRuleset(automataObj.getJSONObject("rules"));			
+				System.out.println(automataObj.getJSONObject("rules"));
+				State.createRuleset(automataObj.getJSONObject("rules"));			
 				Settings.isSimple = false;
 			} catch(RuntimeException e) {
-				Ruleset.createRuleset(automataObj.getInt("rules", 0));
+				State.createRuleset(automataObj.getInt("rules", 0));
 				Settings.isSimple = true;
 			}
 			
@@ -147,5 +148,24 @@ public class Settings {
 	 */
 	public static boolean isSimpleRuleset() {
 		return isSimple;
+	}
+	
+	/**
+	 * Saves settings to JSON file
+	 * @param jsonFile - the file to save JSON settings to
+	 * @param grid - needs the grid in order to save initial state
+	 */
+	public static void saveToJSON(File jsonFile, Grid g) {
+		JSONObject savedJSON = new JSONObject();
+		savedJSON.setBoolean("wrap", wrapping);
+		JSONObject size = new JSONObject();
+		size.setInt("x", xSize);
+		size.setInt("y", ySize);
+		size.setInt("z", zSize);
+		savedJSON.setJSONObject("size", size);
+		savedJSON.setString("dimension", dimension.toString());
+		savedJSON.setString("neighborType", neighborType.toString());
+		savedJSON.setJSONArray("initial_state", g.getJsonArray());
+		
 	}
 }

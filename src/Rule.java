@@ -1,7 +1,7 @@
 /**
  * The generic rule class
  */
-public abstract class Rule {
+public abstract class Rule implements Jsonable{
 
 	/**
 	 * Returns true iff the ruleset is satisfied with the given neighbors
