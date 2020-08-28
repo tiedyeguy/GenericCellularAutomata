@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +13,23 @@ import processing.data.JSONObject;
 public class Ruleset {
 	private static Ruleset instance;
 	private Map<State, ArrayList<Rule>> rulesets;
-
+	
+	private Ruleset(int ruleNumber) {
+		rulesets = new HashMap<State, ArrayList<Rule>>();
+		Set<String> states = new HashSet<String>();
+		states.add("default");
+		states.add("live");
+		State.addAllStates(states);
+		State liveState = State.getState("live");
+		liveState.setColor("A0A080");
+		
+		ArrayList<Rule> simpleRule = new ArrayList<Rule>();
+		simpleRule.add(new Rule1D(ruleNumber));
+		
+		rulesets.put(liveState, simpleRule);
+		rulesets.put(State.getState("default"), simpleRule);
+	}
+	
 	private Ruleset(JSONObject ruleset) {
 		rulesets = new HashMap<State, ArrayList<Rule>>();
 		@SuppressWarnings("unchecked")
@@ -38,6 +55,10 @@ public class Ruleset {
 		}
 	}
 	
+	/**
+	 * Gets the static instance of the Rules for the running automata
+	 * @return
+	 */
 	public static Ruleset getRuleset() {
 		if(instance != null) {
 			return instance;
@@ -48,11 +69,19 @@ public class Ruleset {
 	}
 
 	/**
-	 * Creates the ruleset for this cellular automata based on the given reader. Must be called before getRuleset()
+	 * Creates the ruleset for this cellular automata based on the given object. Must be called before getRuleset()
 	 * @param rulesObj - Must be a json 'rules' object, will use each entry in object to find rulesets
 	 */
 	public static void createRuleset(JSONObject rulesObj) {
 		instance = new Ruleset(rulesObj);
+	}
+	
+	/**
+	 * Creates the ruleset for this cellular automata based on the given integer, for Rules1D automata
+	 * @param ruleNumber - The number that defines which rules this is
+	 */
+	public static void createRuleset(int ruleNumber) {
+		instance = new Ruleset(ruleNumber);
 	}
 
 	/**

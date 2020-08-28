@@ -9,7 +9,7 @@ import processing.data.JSONObject;
  * Contains user preferences that don't fall under a cell state
  */
 public class Settings {
-	// Whether the grid wraps around on itself (leftmost cells have neighbors on the right side)
+	//Whether the grid wraps around on itself (leftmost cells have neighbors on the right side)
 	private static boolean wrapping;
 	//Dimensions of the grid, including whether the grid tracks time
 	private static Dimension dimension;
@@ -21,7 +21,9 @@ public class Settings {
 	private static int ySize;
 	//The z dimension of the grid, 1 if one or two dimensional
 	private static int zSize;
-
+	//Represents whether this ruleset is 'simple' or 'complex', complex rules have more than two discrete states while simple rulesets are represented by integers
+	private static boolean isSimple;
+	
 	/**
 	 * Initializes the settings with user preferences
 	 * @param jsonAutomata - The JSON file that contains all the information for the simulation, see template on github
@@ -37,8 +39,14 @@ public class Settings {
 			sc.close();
 
 			JSONObject automataObj = JSONObject.parse(jsonAsStr);
-
-			Ruleset.createRuleset(automataObj.getJSONObject("rules"));
+			try {
+				Ruleset.createRuleset(automataObj.getJSONObject("rules"));			
+				Settings.isSimple = false;
+			} catch(RuntimeException e) {
+				Ruleset.createRuleset(automataObj.getInt("rules", 0));
+				Settings.isSimple = true;
+			}
+			
 			Settings.wrapping = automataObj.getBoolean("wrap");
 			setDimension(automataObj.getString("dimensions", "2"));
 			setNeighborType(automataObj.getString("type", "M"));
@@ -131,5 +139,13 @@ public class Settings {
 	 */
 	public static int getZDimension() {
 		return zSize;
+	}
+	
+	/**
+	 * A simple ruleset is one represented by a binary string, consists of two states. Complex rulesets are game of life, wire world, etc.
+	 * @return - True iff the ruleset is a simple ruleset (requires cells to be in their own neighbor array), false if complex (cell not included in neighbor array)
+	 */
+	public static boolean isSimpleRuleset() {
+		return isSimple;
 	}
 }

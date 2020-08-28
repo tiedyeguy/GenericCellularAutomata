@@ -33,9 +33,19 @@ public class ComplexRule extends Rule {
 
 	
 	@Override
-	public boolean isTrue(Map<State, Number> neighbors) {
+	public boolean isTrue(Cell[] neighbors) {
+		Map<State, Number> neighborCounts = new HashMap<State, Number>();
+
+		for (Cell neighbor : neighbors) {
+			if (neighborCounts.containsKey(neighbor.getState())) {
+				neighborCounts.put(neighbor.getState(), neighborCounts.get(neighbor.getState()).intValue() + 1);
+			} else {
+				neighborCounts.put(neighbor.getState(), 1);
+			}
+		}
+		
 		for(State discreteState : stateThresholds.keySet()) {
-			if(!stateThresholds.get(discreteState).contains(neighbors.getOrDefault(discreteState, 0)))
+			if(!stateThresholds.get(discreteState).contains(neighborCounts.getOrDefault(discreteState, 0)))
 				return false;
 		}
 		return true;

@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import processing.core.PApplet;
-import processing.core.PVector;
 
 /**
  * Holds all cells and has methods that correspond to cell methods, to call of
@@ -107,11 +106,12 @@ public class Grid {
 
 		neighbors = neighbors.stream().distinct().collect(Collectors.toList()); //Remove duplicates
 
-		ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
-		justMeList.add(cells[cellZ][cellY][cellX]);
-
-		neighbors.removeAll(justMeList); //Remove Cell itself
-
+		if(!Settings.isSimpleRuleset()) {
+			ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
+			justMeList.add(cells[cellZ][cellY][cellX]);	
+			neighbors.removeAll(justMeList); //Remove Cell itself
+		}
+		
 		Cell[] arr = new Cell[neighbors.size()];
 
 		return neighbors.toArray(arr);

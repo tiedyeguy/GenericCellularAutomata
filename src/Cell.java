@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -40,21 +38,11 @@ public class Cell {
 	 */
 	public void prepareNextState() {
 		ArrayList<Rule> ruleset = Ruleset.getRuleset().getRulesFor(state);
-
-		Map<State, Number> neighborCounts = new HashMap<State, Number>();
-
-		for (Cell neighbor : neighbors) {
-			if (neighborCounts.containsKey(neighbor.getState())) {
-				neighborCounts.replace(neighbor.getState(), neighborCounts.get(neighbor.getState()).intValue() + 1);
-			} else {
-				neighborCounts.put(neighbor.getState(), 1);
-			}
-		}
-
+		
 		Rule firstTrueRule = null;
 
 		for (Rule rule : ruleset) {
-			if (rule.isTrue(neighborCounts)) {
+			if (rule.isTrue(neighbors)) {
 				if(firstTrueRule != null) {
 					throw new IllegalStateException(firstTrueRule.toString() + " and " + rule.toString() + " conflict with each other.");
 				}

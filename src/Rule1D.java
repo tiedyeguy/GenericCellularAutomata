@@ -1,5 +1,3 @@
-import java.util.Map;
-
 /**
  * Class that defines rules for any one dimensional automata
  */
@@ -12,7 +10,7 @@ public class Rule1D extends Rule {
 	}
 	
 	/**
-	 * The rule in this context should be binary, i.e. "10010011"
+	 * The rule in this context should be binary, i.e. "10010011". If its just an integer, pass to other constructor
 	 * @param rule - binary rule for the string
 	 */
 	public Rule1D(String rule) {
@@ -20,8 +18,13 @@ public class Rule1D extends Rule {
 	}
 
 	@Override
-	public boolean isTrue(Map<State, Number> neighbors) {
-		return false;
+	public boolean isTrue(Cell[] neighbors) {
+		int stateNumber = 0;
+		for(int i = 0; i < neighbors.length; i++) {
+			stateNumber += (neighbors[i].getState().getName().equals("default") ? 0 : 1) * ((int)Math.pow(2, i));
+		}
+		int stateAcceptDigit = (rule>>(int)Math.pow(2, stateNumber))%2;
+		return stateAcceptDigit == 1;
 	}
 
 	@Override

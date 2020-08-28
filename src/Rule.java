@@ -1,5 +1,3 @@
-import java.util.Map;
-
 /**
  * The generic rule class
  */
@@ -7,10 +5,10 @@ public abstract class Rule {
 
 	/**
 	 * Returns true iff the ruleset is satisfied with the given neighbors
-	 * @param neighbors - The number of each type of cell neighboring the one you are applying this rule to
+	 * @param neighbors - The array of neighboring cells to the one you are applying this rule to
 	 * @return - true if the rule can be applied validly, false if the rule can't be applied to the cell
 	 */
-	public abstract boolean isTrue(Map<State, Number> neighbors);
+	public abstract boolean isTrue(Cell[] neighbors);
 	
 	/**
 	 * The state that the cell should transition to if this rule isTrue
