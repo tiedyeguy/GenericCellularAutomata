@@ -39,18 +39,22 @@ public class Driver extends PApplet {
 			}
 		}
 
+		// FIXME z should not always be one, y should sometimes be set manually (1d)
 		Cell.setSize(
-				new PVector((float) width / Settings.getXDimension(), (float) height / Settings.getYDimension(), 1));
+				new PVector((float) width / Settings.getXDimension(), (float) height / Settings.getYDimension(), 50));
 
 		penState = State.getAllStates().stream().filter((state) -> !state.getName().equals("default")).findAny().get();
-		userDrawing = !(Settings.getDimension() == Dimension.TWO_TIME || Settings.getDimension() == Dimension.THREE);
-		// camera = new PeasyCam(this, 1000);
-//		camera.setActive(
-//				!userDrawing;
+		userDrawing = Settings.getDimension().isDrawn2D();
+
+		if (!userDrawing) {
+			// TODO generalize based on z (0.5 * zDim * cell size.z)
+			camera = new PeasyCam(this, width / 2, height / 2, 50 * 7.5, 60);
+		}
 
 		// TODO adjustable speed
 		// TODO save initial state
-		frameRate(10);
+		// TODO clear grid
+		// TODO _TIME
 	}
 
 	public void draw() {
@@ -68,6 +72,7 @@ public class Driver extends PApplet {
 
 			pushMatrix();
 			translate(mouseX, mouseY);
+			noStroke();
 			sphere(15);
 			popMatrix();
 		} else {
@@ -93,7 +98,7 @@ public class Driver extends PApplet {
 	}
 
 	public void keyPressed() {
-		if (key == ' ' && Settings.getDimension() != Dimension.THREE && Settings.getDimension() != Dimension.TWO_TIME) {
+		if (key == ' ' && Settings.getDimension().isDrawn2D()) {
 			userDrawing = !userDrawing;
 		} else if (userDrawing) {
 			State newState = State.getStateFromHotkey(key);

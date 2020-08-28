@@ -80,12 +80,19 @@ public class Cell {
 	 * @param sketch to draw to
 	 */
 	public void draw(PApplet sketch) {
-		sketch.fill(state.getRed(), state.getGreen(), state.getBlue());
+		sketch.pushMatrix();
 		
-		if(Settings.getDimension() == Dimension.TWO_TIME && state.getName().contentEquals("default")) {
+		sketch.translate(Cell.getSize().x / 2, Cell.getSize().y / 2, Cell.getSize().z / 2);		
+		sketch.fill(state.getRed(), state.getGreen(), state.getBlue());
+		sketch.stroke(0);
+		
+		if(!Settings.getDimension().isDrawn2D() && state.getName().equals("default")) {
 			sketch.noFill();
+			sketch.noStroke();
 		}
 		
 		sketch.box(Cell.getSize().x, Cell.getSize().y, Cell.getSize().z);
+		
+		sketch.popMatrix();
 	}
 }
