@@ -167,6 +167,16 @@ public class Grid {
 				for (int x = 0; x < cells[z][y].length; x++)
 					cells[z][y][x].updateState();
 	}
+	
+	/**
+	 * Reverts all cells to their previous state
+	 */
+	public void revert() {
+		for (int z = 0; z < cells.length; z++)
+			for (int y = 0; y < cells[z].length; y++)
+				for (int x = 0; x < cells[z][y].length; x++)
+					cells[z][y][x].revert();
+	}
 
 	/**
 	 * Draws all cells to the screen
