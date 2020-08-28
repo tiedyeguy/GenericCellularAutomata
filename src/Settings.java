@@ -40,7 +40,6 @@ public class Settings {
 
 			JSONObject automataObj = JSONObject.parse(jsonAsStr);
 			try {
-				System.out.println(automataObj.getJSONObject("rules"));
 				State.createRuleset(automataObj.getJSONObject("rules"));			
 				Settings.isSimple = false;
 			} catch(RuntimeException e) {

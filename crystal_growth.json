@@ -1,18 +1,18 @@
 {
   "initial_state": [
     {
-      "x": 8,
-      "y": 8,
-      "z": 8,
+      "x": 24,
+      "y": 24,
+      "z": 24,
       "state": "live"
     }
   ],
   "size": {
-    "x": 15,
-    "y": 15,
-    "z": 15
+    "x": 50,
+    "y": 50,
+    "z": 50
   },
-  "type": "M",
+  "type": "N",
   "dimensions": 3,
   "wrap": false,
   "rules": {
@@ -23,10 +23,7 @@
       }
     },
     "live": {
-      "color": "FFFFFF",
-      "live": {
-        "live": "0-6"
-      },
+      "color": "FFFFFF"
     }
   }
 }

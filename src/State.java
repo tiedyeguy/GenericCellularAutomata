@@ -160,7 +160,6 @@ public class State implements Jsonable {
 	public void loadFromJSON(JSONObject jsonable) {
 		for(Object stateAttribute : jsonable.keys()) {
 			String stateAttributeName = (String)stateAttribute;
-			System.out.println(stateAttributeName);
 			if(stateAttributeName.equals("color")) {
 				setColor(jsonable.getString(stateAttributeName));
 			} else if(stateAttributeName.equals("hotkey")) {
