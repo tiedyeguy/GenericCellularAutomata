@@ -50,8 +50,8 @@ public class Settings {
 			}
 			
 			Settings.wrapping = automataObj.getBoolean("wrap");
-			setDimension(automataObj.getString("dimensions", "2"));
-			setNeighborType(automataObj.getString("type", "M"));
+			Settings.dimension = Dimension.valueOfLabel(automataObj.getString("dimensions", "2"));
+			Settings.neighborType = NeighborType.typeOfChar((automataObj.getString("type", "M")).charAt(0));
 			JSONObject size = automataObj.getJSONObject("size");
 			Settings.xSize = size.getInt("x", 1);
 			Settings.ySize = size.getInt("y", 1);
@@ -62,49 +62,6 @@ public class Settings {
 			System.err.println("JSON Config File not found");
 			e.printStackTrace();
 			return null;
-		}
-	}
-
-	/**
-	 * Converts between the string representation to the NeighborType Enum
-	 * @param neighborType - Sets the global neighbor type from a string representation
-	 */
-	private static void setNeighborType(String neighborType) {
-		switch(neighborType) {
-		case "N":
-			Settings.neighborType = NeighborType.NEUMANN;
-			break;
-		case "M":
-			Settings.neighborType = NeighborType.MOORE;
-			break;
-		default:
-			Settings.neighborType = NeighborType.MOORE;		
-		}
-	}
-
-	/**
-	 * Converts between the String representation to the Dimension Enum
-	 * @param dimension - Sets the global dimension type from this string representation
-	 */
-	private static void setDimension(String dimension) {
-		switch(dimension) {
-		case "1":
-			Settings.dimension = Dimension.ONE;
-			break;
-		case "1-time":
-			Settings.dimension = Dimension.ONE_TIME;
-			break;
-		case "2":
-			Settings.dimension = Dimension.TWO;
-			break;
-		case "2-time":
-			Settings.dimension = Dimension.TWO_TIME;
-			break;
-		case "3":
-			Settings.dimension = Dimension.THREE;
-			break;
-		default: 
-			Settings.dimension = Dimension.TWO;
 		}
 	}
 
@@ -170,12 +127,16 @@ public class Settings {
 		savedJSON.setBoolean("wrap", wrapping);
 		JSONObject size = new JSONObject();
 		size.setInt("x", xSize);
-		size.setInt("y", ySize);
-		size.setInt("z", zSize);
+		if(ySize > 1)
+			size.setInt("y", ySize);
+		if(zSize > 1)
+			size.setInt("z", zSize);
 		savedJSON.setJSONObject("size", size);
-		savedJSON.setString("dimension", dimension.toString());
-		savedJSON.setString("neighborType", neighborType.toString());
-		savedJSON.setJSONArray("initial_state", g.getJsonArray());
-		
+		savedJSON.setString("dimension", dimension.value);
+		savedJSON.setString("neighborType", ""+neighborType.type);
+		JSONArray initialState = g.getJsonArray();
+		if(initialState != null)
+			savedJSON.setJSONArray("initial_state", initialState);
+		savedJSON.save(jsonFile, "");
 	}
 }

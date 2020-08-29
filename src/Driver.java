@@ -3,6 +3,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.swing.JFileChooser;
+
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -31,7 +33,11 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		JSONArray init_state = Settings.init(new File("test.json")); // TODO: Allow user to pick file
+		setupAutomata(new File("test.json"));
+	}
+
+	private void setupAutomata(File inputFile) {
+		JSONArray init_state = Settings.init(inputFile);
 		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
 
 		if (init_state != null) {
@@ -61,12 +67,16 @@ public class Driver extends PApplet {
 
 		pastGrids = new LinkedList<Grid>();
 		pastGrids.add(grid.deepClone());
+<<<<<<< HEAD
 
 		// TODO save initial state
 		// TODO _TIME (stepping backwards)
 		// FIXME one dimension everything
+=======
+		
+>>>>>>> branch 'master' of https://github.com/tiedyeguy/GenericCellularAutomata.git
 	}
-
+	
 	public void draw() {
 		background(0);
 
@@ -138,10 +148,23 @@ public class Driver extends PApplet {
 				grid.handleClick(mouseX, mouseY, State.getState("default"));
 		}
 	}
-
+	
 	public void keyPressed() {
-		if (key == DELETE) {
+		if(key == DELETE) {
 			setup();
+		} else if(key == 'L') {
+			JFileChooser fileChooser = new JFileChooser("./");
+			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File f = fileChooser.getSelectedFile();
+				setupAutomata(f);
+			}
+		} else if(key == 'S') {
+			JFileChooser fileChooser = new JFileChooser("./");
+			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File f = fileChooser.getSelectedFile();
+				Settings.saveToJSON(f, grid);
+			}
+
 		} else if (key == ' ') {
 			if (Settings.getDimension().isDrawn2D())
 				userDrawing = !userDrawing;
@@ -150,10 +173,12 @@ public class Driver extends PApplet {
 		} else if (key == CODED) {
 			if (keyCode == UP || keyCode == DOWN) {
 				speed = constrain(speed + (keyCode == UP ? -1 : 1), 0, 2);
-			} else if (keyCode == RIGHT) {
+			}
+			else if(keyCode == RIGHT) {
 				grid.prepareAllStates();
 				grid.updateAllStates();
-			} else if (keyCode == LEFT) {
+			}
+			else if(keyCode == LEFT) {
 				grid.revert();
 			}
 		} else if (userDrawing) {
