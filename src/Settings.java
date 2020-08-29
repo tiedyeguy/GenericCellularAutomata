@@ -23,6 +23,8 @@ public class Settings {
 	private static int zSize;
 	//Represents whether this ruleset is 'simple' or 'complex', complex rules have more than two discrete states while simple rulesets are represented by integers
 	private static boolean isSimple;
+	//Represents the depth for the past if grid history is displayed
+	private static int time_depth;
 	
 	/**
 	 * Initializes the settings with user preferences
@@ -54,6 +56,7 @@ public class Settings {
 			Settings.xSize = size.getInt("x", 1);
 			Settings.ySize = size.getInt("y", 1);
 			Settings.zSize = size.getInt("z", 1);
+			Settings.time_depth = automataObj.getInt("time-depth", 1);
 			return automataObj.getJSONArray("initial_state");
 		} catch (FileNotFoundException e) {
 			System.err.println("JSON Config File not found");
