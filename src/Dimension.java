@@ -12,4 +12,13 @@ public enum Dimension {
 	public boolean isTimed() {
 		return this == ONE_TIME || this == TWO_TIME;
 	}
+	
+	public int getDimensionNumber() {
+		if(this == ONE || this == ONE_TIME)
+			return 1;
+		else if(this == TWO || this == TWO_TIME)
+			return 2;
+		else 
+			return 3;
+	}
 }

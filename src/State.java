@@ -136,10 +136,10 @@ public class State implements Jsonable {
 	 */
 	public static void createRuleset(int ruleNumber) {
 		State liveState = new State("live");
-		liveState.setColor("A0A080");
+		liveState.setColor("FFFFFF");
 		State deadState = new State("default");
 		
-		Rule1D simpleRule = new Rule1D(ruleNumber);
+		SimpleRule simpleRule = new SimpleRule(ruleNumber);
 		
 		liveState.getRules().add(simpleRule);
 		deadState.getRules().add(simpleRule);

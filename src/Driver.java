@@ -81,7 +81,7 @@ public class Driver extends PApplet {
 			if (Settings.getDimension().isTimed()) {
 				pastGrids.add(grid.deepClone());
 
-				if (pastGrids.size() > Settings.getZDimension())
+				if (pastGrids.size() > Settings.getTimeDepth())
 					pastGrids.remove();
 			}
 
