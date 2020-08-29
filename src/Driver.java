@@ -1,4 +1,7 @@
 import java.io.File;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
@@ -17,6 +20,7 @@ public class Driver extends PApplet {
 	boolean paused;
 	State penState;
 	int speed = 1;
+	Queue<Grid> pastGrids;
 
 	public static void main(String[] args) {
 		PApplet.main("Driver");
@@ -52,9 +56,12 @@ public class Driver extends PApplet {
 		paused = !userDrawing;
 
 		if (paused) {
-			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * zCellSize * Settings.getZDimension(), 1000);
+			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * Cell.getSize().z * Settings.getZDimension(), 1000);
 		}
 
+		pastGrids = new LinkedList<Grid>();
+		pastGrids.add(grid.deepClone());
+		
 		// TODO save initial state
 		// TODO _TIME
 	}
@@ -71,10 +78,34 @@ public class Driver extends PApplet {
 			framesPerTick = 60;
 
 		if (!paused && !userDrawing && frameCount % framesPerTick == 0) {
+			if (Settings.getDimension().isTimed()) {
+				pastGrids.add(grid.deepClone());
+
+				if (pastGrids.size() > Settings.getZDimension())
+					pastGrids.remove();
+			}
+
 			grid.prepareAllStates();
 			grid.updateAllStates();
 		}
-		grid.draw(this);
+
+		if (Settings.getDimension().isTimed()) {
+			Iterator<Grid> i = pastGrids.iterator();
+
+			pushMatrix();
+			while (i.hasNext()) {
+				i.next().draw(this);
+
+				if (Settings.getDimension() == Dimension.ONE_TIME) {
+					translate(0, Cell.getSize().y);
+				} else {
+					translate(0, 0, Cell.getSize().z);
+				}
+			}
+			popMatrix();
+		} else {
+			grid.draw(this);
+		}
 
 		if (userDrawing) {
 			noCursor();
@@ -108,10 +139,9 @@ public class Driver extends PApplet {
 	}
 
 	public void keyPressed() {
-		if(key == DELETE) {
+		if (key == DELETE) {
 			setup();
-		}
-		else if (key == ' ') {
+		} else if (key == ' ') {
 			if (Settings.getDimension().isDrawn2D())
 				userDrawing = !userDrawing;
 			else
@@ -119,12 +149,10 @@ public class Driver extends PApplet {
 		} else if (key == CODED) {
 			if (keyCode == UP || keyCode == DOWN) {
 				speed = constrain(speed + (keyCode == UP ? -1 : 1), 0, 2);
-			}
-			else if(keyCode == RIGHT) {
+			} else if (keyCode == RIGHT) {
 				grid.prepareAllStates();
 				grid.updateAllStates();
-			}
-			else if(keyCode == LEFT) {
+			} else if (keyCode == LEFT) {
 				grid.revert();
 			}
 		} else if (userDrawing) {

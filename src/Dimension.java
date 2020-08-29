@@ -8,4 +8,8 @@ public enum Dimension {
 	public boolean isDrawn2D() {
 		return !(this == TWO_TIME || this == THREE);
 	}
+	
+	public boolean isTimed() {
+		return this == ONE_TIME || this == TWO_TIME;
+	}
 }
