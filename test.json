@@ -1,69 +1,9 @@
 {
-<<<<<<< HEAD
-  "initial_state": [
-    {"x": 10,"y": 10, "state": "live"},
-    {"x": 10,"y": 11, "state": "live"},
-    {"x": 11,"y": 10, "state": "live"},
-    {"x": 11,"y": 11, "state": "live"},
-    {"x": 14,"y": 11, "state": "live"},
-    {"x": 15,"y": 10, "state": "live"},
-    {"x": 15,"y": 12, "state": "live"},
-    {"x": 16,"y": 9, "state": "live"},
-    {"x": 16,"y": 13, "state": "live"},
-    {"x": 17,"y": 13, "state": "live"},
-    {"x": 19,"y": 10, "state": "live"},
-    {"x": 19,"y": 13, "state": "live"},
-    {"x": 20,"y": 10, "state": "live"},
-    {"x": 20,"y": 13, "state": "live"},
-    {"x": 21,"y": 10, "state": "live"},
-    {"x": 21,"y": 11, "state": "live"},
-    {"x": 21,"y": 12, "state": "live"},
-    {"x": 34,"y": 21, "state": "live"},
-    {"x": 34,"y": 22, "state": "live"},
-    {"x": 35,"y": 21, "state": "live"},
-    {"x": 35,"y": 22, "state": "live"},
-    {"x": 37,"y": 18, "state": "live"},
-    {"x": 37,"y": 19, "state": "live"},
-    {"x": 38,"y": 18, "state": "live"},
-    {"x": 38,"y": 19, "state": "live"},
-    {"x": 41,"y": 21, "state": "live"},
-    {"x": 41,"y": 22, "state": "live"},
-    {"x": 42,"y": 21, "state": "live"},
-    {"x": 42,"y": 22, "state": "live"}
-  ],
-=======
->>>>>>> branch 'master' of https://github.com/tiedyeguy/GenericCellularAutomata.git
   "size": {
-<<<<<<< HEAD
-    "x": 50,
-    "y": 50,
-    "z": 75,
-=======
     "x": 50
->>>>>>> branch 'master' of https://github.com/tiedyeguy/GenericCellularAutomata.git
   },
-<<<<<<< HEAD
   "type": "M",
-  "dimensions": "2-time",
-  "wrap": true,
-  "rules": {
-    "default": {
-      "color": "000000",
-      "live": {
-        "live": "3"
-      }
-    },
-    "live": {
-      "color": "FFFFFF",
-      "default": {
-        "live": "0-1,4-8"
-      }
-    }
-  }
-}
-=======
   "dimensions": 1,
   "wrap": false,
-  "rules": 30
+  "rule": 30
 }
->>>>>>> branch 'master' of https://github.com/tiedyeguy/GenericCellularAutomata.git

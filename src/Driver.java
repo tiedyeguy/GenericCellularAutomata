@@ -46,7 +46,7 @@ public class Driver extends PApplet {
 		}
 
 		float xCellSize = (float) width / Settings.getXDimension();
-		float yCellSize = (float) height / Settings.getYDimension();
+		float yCellSize = (float) height / (Settings.getDimension().getDimensionNumber() == 1 ? Settings.getTimeDepth() : Settings.getYDimension());
 		float zCellSize = Settings.getDimension().isDrawn2D() ? 1 : (xCellSize + yCellSize) / 2;
 
 		Cell.setSize(new PVector(xCellSize, yCellSize, zCellSize));
@@ -61,9 +61,10 @@ public class Driver extends PApplet {
 
 		pastGrids = new LinkedList<Grid>();
 		pastGrids.add(grid.deepClone());
-		
+
 		// TODO save initial state
-		// TODO _TIME
+		// TODO _TIME (stepping backwards)
+		// FIXME one dimension everything
 	}
 
 	public void draw() {
@@ -105,7 +106,7 @@ public class Driver extends PApplet {
 			popMatrix();
 		} else {
 			grid.draw(this);
-		}
+		}		
 
 		if (userDrawing) {
 			noCursor();
