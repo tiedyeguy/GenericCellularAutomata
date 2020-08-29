@@ -26,6 +26,10 @@ public enum Dimension {
 		return !(this == TWO_TIME || this == THREE);
 	}
 	
+	public boolean isTimed() {
+		return this == ONE_TIME || this == TWO_TIME;
+	}
+	
 	public int getDimensionNumber() {
 		return dimNum;
 	}

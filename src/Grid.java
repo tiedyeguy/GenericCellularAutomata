@@ -14,6 +14,9 @@ public class Grid {
 
 	private Cell[][][] cells;
 
+	private Grid() {
+	}
+	
 	public Grid(int len) {
 		initCells(len, 1, 1);
 	}
@@ -116,6 +119,23 @@ public class Grid {
 		
 		Cell[] arr = new Cell[neighbors.size()];
 		return neighbors.toArray(arr);
+	}
+	
+	/**
+	 * Returns a deep clone of this grid
+	 * @return deep clone of this grid
+	 */
+	public Grid deepClone() {
+		Grid clone = new Grid();
+		
+		clone.cells = new Cell[cells.length][cells[0].length][cells[0][0].length];
+		
+		for (int z = 0; z < cells.length; z++)
+			for (int y = 0; y < cells[z].length; y++)
+				for (int x = 0; x < cells[z][y].length; x++)
+					clone.cells[z][y][x] = cells[z][y][x].deepClone();
+		
+		return clone;
 	}
 
 	/**

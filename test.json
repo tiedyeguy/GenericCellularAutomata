@@ -1,11 +1,8 @@
-{
-  "neighborType": "MOORE",
-  "size": {
-    "x": 50,
-    "y": 50,
-    "z": 1
-  },
-  "initial_state": [],
-  "wrap": true,
-  "dimension": "TWO"
-}
+public static Dimension valueOfLabel(String label) {
+	    for (Dimension e : values()) {
+	        if (e.value.equals(label)) {
+	            return e;
+	        }
+	    }
+	    return null;
+	}

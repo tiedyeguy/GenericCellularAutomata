@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 import processing.core.PApplet;
@@ -37,6 +38,19 @@ public class Cell {
 	public void setState(State state) {
 		this.state = state;
 		nextState = state;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Cell deepClone() {
+		Cell clone = new Cell();
+		
+		clone.pastStates = (Stack<State>) pastStates.clone();
+		clone.neighbors = Arrays.copyOf(neighbors, neighbors.length);
+		
+		clone.state = state;
+		clone.nextState = nextState;
+		
+		return clone;
 	}
 
 	/**

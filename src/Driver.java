@@ -1,4 +1,7 @@
 import java.io.File;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.JFileChooser;
 
@@ -19,6 +22,7 @@ public class Driver extends PApplet {
 	boolean paused;
 	State penState;
 	int speed = 1;
+	Queue<Grid> pastGrids;
 
 	public static void main(String[] args) {
 		PApplet.main("Driver");
@@ -58,9 +62,12 @@ public class Driver extends PApplet {
 		paused = !userDrawing;
 
 		if (paused) {
-			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * zCellSize * Settings.getZDimension(), 1000);
+			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * Cell.getSize().z * Settings.getZDimension(), 1000);
 		}
 
+		pastGrids = new LinkedList<Grid>();
+		pastGrids.add(grid.deepClone());
+		
 	}
 	
 	public void draw() {
@@ -75,10 +82,34 @@ public class Driver extends PApplet {
 			framesPerTick = 60;
 
 		if (!paused && !userDrawing && frameCount % framesPerTick == 0) {
+			if (Settings.getDimension().isTimed()) {
+				pastGrids.add(grid.deepClone());
+
+				if (pastGrids.size() > Settings.getTimeDepth())
+					pastGrids.remove();
+			}
+
 			grid.prepareAllStates();
 			grid.updateAllStates();
 		}
-		grid.draw(this);
+
+		if (Settings.getDimension().isTimed()) {
+			Iterator<Grid> i = pastGrids.iterator();
+
+			pushMatrix();
+			while (i.hasNext()) {
+				i.next().draw(this);
+
+				if (Settings.getDimension() == Dimension.ONE_TIME) {
+					translate(0, Cell.getSize().y);
+				} else {
+					translate(0, 0, Cell.getSize().z);
+				}
+			}
+			popMatrix();
+		} else {
+			grid.draw(this);
+		}
 
 		if (userDrawing) {
 			noCursor();
