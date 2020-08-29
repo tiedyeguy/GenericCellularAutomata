@@ -1,8 +1,0 @@
-public static Dimension valueOfLabel(String label) {
-	    for (Dimension e : values()) {
-	        if (e.value.equals(label)) {
-	            return e;
-	        }
-	    }
-	    return null;
-	}
