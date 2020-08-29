@@ -1,8 +1,11 @@
 {
+  "neighborType": "MOORE",
   "size": {
-    "x": 50
+    "x": 50,
+    "y": 50,
+    "z": 1
   },
-  "dimensions": 1,
-  "wrap": false,
-  "rules": 30
+  "initial_state": [],
+  "wrap": true,
+  "dimension": "TWO"
 }

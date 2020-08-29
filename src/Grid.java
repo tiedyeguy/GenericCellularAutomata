@@ -216,6 +216,7 @@ public class Grid {
 	 */
 	public JSONArray getJsonArray() {
 		JSONArray arr = new JSONArray();
+		int index = 0;
 		for (int z = 0; z < cells.length; z++)
 			for (int y = 0; y < cells[z].length; y++)
 				for (int x = 0; x < cells[z][y].length; x++) {
@@ -225,9 +226,12 @@ public class Grid {
 						cellObj.setInt("y", y);
 						cellObj.setInt("z", z);
 						cellObj.setString("state", cells[z][y][x].getState().getName());
+						arr.setJSONObject(index, cellObj);
+						index++;
 					}
 				}
-					
+		if(index == 0)
+			return null;
 		return arr;
 	}
 

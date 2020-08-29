@@ -1,5 +1,7 @@
 import java.io.File;
 
+import javax.swing.JFileChooser;
+
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -27,7 +29,11 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		JSONArray init_state = Settings.init(new File("test.json")); // TODO: Allow user to pick file
+		setupAutomata(new File("test.json"));
+	}
+
+	private void setupAutomata(File inputFile) {
+		JSONArray init_state = Settings.init(inputFile);
 		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
 
 		if (init_state != null) {
@@ -55,10 +61,8 @@ public class Driver extends PApplet {
 			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * zCellSize * Settings.getZDimension(), 1000);
 		}
 
-		// TODO save initial state
-		// TODO _TIME
 	}
-
+	
 	public void draw() {
 		background(0);
 
@@ -106,12 +110,24 @@ public class Driver extends PApplet {
 				grid.handleClick(mouseX, mouseY, State.getState("default"));
 		}
 	}
-
+	
 	public void keyPressed() {
 		if(key == DELETE) {
 			setup();
-		}
-		else if (key == ' ') {
+		} else if(key == 'L') {
+			JFileChooser fileChooser = new JFileChooser("./");
+			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File f = fileChooser.getSelectedFile();
+				setupAutomata(f);
+			}
+		} else if(key == 'S') {
+			JFileChooser fileChooser = new JFileChooser("./");
+			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File f = fileChooser.getSelectedFile();
+				Settings.saveToJSON(f, grid);
+			}
+
+		} else if (key == ' ') {
 			if (Settings.getDimension().isDrawn2D())
 				userDrawing = !userDrawing;
 			else
