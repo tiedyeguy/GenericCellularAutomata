@@ -121,6 +121,14 @@ public class Settings {
 	}
 
 	/**
+	 * If the dimension is timed, this tracks how deep the display goes
+	 * @return - integer depth, should be 1 or greater
+	 */
+	public static int getTimeDepth() {
+		return time_depth;
+	}
+	
+	/**
 	 * Gets the max X dimension of this automata
 	 * @return - integer size value
 	 */
