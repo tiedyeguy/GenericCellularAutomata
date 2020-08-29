@@ -115,7 +115,6 @@ public class Grid {
 		}
 		
 		Cell[] arr = new Cell[neighbors.size()];
-
 		return neighbors.toArray(arr);
 	}
 
