@@ -1,49 +1,260 @@
 {
+  "neighborType": "m",
+  "size": {
+    "x": 15,
+    "y": 15
+  },
   "initial_state": [
     {
       "x": 0,
       "y": 0,
+      "z": 0,
       "state": "tail"
     },
     {
       "x": 1,
       "y": 0,
+      "z": 0,
       "state": "head"
     },
     {
       "x": 2,
       "y": 0,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 9,
+      "y": 5,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 11,
+      "y": 5,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 2,
+      "y": 8,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 12,
+      "y": 9,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 12,
+      "y": 10,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 8,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 9,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "z": 0,
+      "state": "wire"
+    },
+    {
+      "x": 11,
+      "y": 11,
+      "z": 0,
       "state": "wire"
     }
   ],
-  "size": {
-    "x": 15,
-    "y": 15
-  },
-  "type": "M",
-  "dimensions": 2,
   "wrap": true,
+  "dimension": "2",
   "rules": {
-    "default": {
-      "color": "000000",
-    },
+    "default": {},
     "wire": {
+      "color": "FFFF00",
       "hotkey": "w",
-      "color": "A000A0",
       "head": {
         "head": "1,2"
-      },
+      }
     },
     "head": {
-      "hotkey": "h",
-      "color": "0000FF",
+      "color": "FF0000",
+      "hotkey": "w",
       "tail": {
         "any": "0-8"
       }
     },
     "tail": {
+      "color": "0000FF",
       "hotkey": "t",
-      "color": "FF0000",
       "wire": {
         "any": "0-8"
       }

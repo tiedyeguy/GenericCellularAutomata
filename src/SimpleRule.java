@@ -44,7 +44,7 @@ public class SimpleRule extends Rule {
 	@Override
 	public JSONObject saveToJson() {
 		JSONObject jsonRule = new JSONObject();
-		jsonRule.setInt("rule", rule);
+		jsonRule.setInt("rules", rule);
 		return jsonRule;
 	}
 
