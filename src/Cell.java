@@ -14,7 +14,7 @@ public class Cell {
 	private State state;
 	private State nextState = State.getState("default");
 	private Stack<State> pastStates;
-	
+
 	public Cell() {
 		pastStates = new Stack<State>();
 	}
@@ -34,22 +34,22 @@ public class Cell {
 	public State getState() {
 		return state;
 	}
-	
+
 	public void setState(State state) {
 		this.state = state;
 		nextState = state;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Cell deepClone() {
 		Cell clone = new Cell();
-		
+
 		clone.pastStates = (Stack<State>) pastStates.clone();
 		clone.neighbors = Arrays.copyOf(neighbors, neighbors.length);
-		
+
 		clone.state = state;
 		clone.nextState = nextState;
-		
+
 		return clone;
 	}
 
@@ -58,15 +58,15 @@ public class Cell {
 	 */
 	public void prepareNextState() {
 		ArrayList<Rule> ruleset = state.getRules();
-		
+
 		Rule firstTrueRule = null;
 
 		for (Rule rule : ruleset) {
 			if (rule.isTrue(neighbors)) {
-				if(firstTrueRule != null) {
-					throw new IllegalStateException(firstTrueRule.toString() + " and " + rule.toString() + " conflict with each other.");
-				}
-				else {
+				if (firstTrueRule != null) {
+					throw new IllegalStateException(
+							firstTrueRule.toString() + " and " + rule.toString() + " conflict with each other.");
+				} else {
 					firstTrueRule = rule;
 					nextState = rule.getState();
 				}
@@ -81,7 +81,7 @@ public class Cell {
 		pastStates.push(state);
 		state = nextState;
 	}
-	
+
 	/**
 	 * Reverts the cell to its previous state
 	 */
@@ -97,16 +97,11 @@ public class Cell {
 	 */
 	public void draw(PApplet sketch) {
 		sketch.pushMatrix();
-		
-		sketch.translate(Cell.getSize().x / 2, Cell.getSize().y / 2, Cell.getSize().z / 2);		
+
+		sketch.translate(Cell.getSize().x / 2, Cell.getSize().y / 2, Cell.getSize().z / 2);
 		sketch.fill(state.getRed(), state.getGreen(), state.getBlue());
-		sketch.stroke(0);
-		
-		if(!Settings.getDimension().isDrawn2D() && state.getName().equals("default")) {
-			sketch.noFill();
-			sketch.noStroke();
-		}
-		
+		// TODO update optimization - could perform updates recursively with neighbors?
+
 		sketch.box(Cell.getSize().x, Cell.getSize().y, Cell.getSize().z);
 		
 		sketch.popMatrix();

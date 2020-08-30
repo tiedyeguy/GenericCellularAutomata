@@ -1,7 +1,8 @@
 import java.io.File;
+import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 
@@ -22,8 +23,8 @@ public class Driver extends PApplet {
 	boolean paused;
 	State penState;
 	int speed = 1;
-	Queue<Grid> pastGrids;
-
+	LinkedList<Grid> pastGrids;
+	
 	public static void main(String[] args) {
 		PApplet.main("Driver");
 	}
@@ -33,12 +34,15 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
+		// TODO I don't know if you can do anything about this, but it'd be nice if this
+		// popup was focused at the start
+
 		File default_json = new File("startup.json");
-		if(default_json.exists()) {
+		if (default_json.exists()) {
 			setupAutomata(default_json);
-		} else {			
+		} else {
 			JFileChooser fileChooser = new JFileChooser("./");
-			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File f = fileChooser.getSelectedFile();
 				setupAutomata(f);
 			}
@@ -47,7 +51,7 @@ public class Driver extends PApplet {
 
 	private void setupAutomata(File inputFile) {
 		JSONArray init_state = Settings.init(inputFile);
-		
+
 		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
 
 		if (init_state != null) {
@@ -55,20 +59,23 @@ public class Driver extends PApplet {
 			JSONObject initCell = init_state.getJSONObject(i);
 			while (initCell != null) {
 				State cellState = State.getState(initCell.getString("state", "default"));
-				if(cellState == null) {
-					System.err.println("STATE " + initCell.getString("state") + " IS NOT A VALID STATE. ONLY " + 
-							State.getAllStates().stream().map((state)->state.getName()).reduce((acc, next)->acc+" "+next).get()
+				if (cellState == null) {
+					System.err.println("STATE " + initCell.getString("state") + " IS NOT A VALID STATE. ONLY "
+							+ State.getAllStates().stream().map((state) -> state.getName())
+									.reduce((acc, next) -> acc + " " + next).get()
 							+ "EXIST");
 					System.exit(0);
 				}
-				grid.setCellStateAtPos(initCell.getInt("x"), initCell.getInt("y", 0), initCell.getInt("z", 0), cellState);
+				grid.setCellStateAtPos(initCell.getInt("x"), initCell.getInt("y", 0), initCell.getInt("z", 0),
+						cellState);
 				i++;
 				initCell = init_state.getJSONObject(i, null);
 			}
 		}
 
 		float xCellSize = (float) width / Settings.getXDimension();
-		float yCellSize = (float) height / (Settings.getDimension().getDimensionNumber() == 1 ? Settings.getTimeDepth() : Settings.getYDimension());
+		float yCellSize = (float) height / (Settings.getDimension().getDimensionNumber() == 1 ? Settings.getTimeDepth()
+				: Settings.getYDimension());
 		float zCellSize = Settings.getDimension().isDrawn2D() ? 1 : (xCellSize + yCellSize) / 2;
 
 		Cell.setSize(new PVector(xCellSize, yCellSize, zCellSize));
@@ -84,12 +91,17 @@ public class Driver extends PApplet {
 		pastGrids = new LinkedList<Grid>();
 		pastGrids.add(grid.deepClone());
 
+		// TODO rendering without stroke is about 3 times faster - include option?
+//		noStroke();
+		stroke(0);
+
 		// TODO save initial state
-		// TODO _TIME (stepping backwards)
 		// FIXME one dimension everything
 	}
-	
+
 	public void draw() {
+		println(frameRate);
+
 		background(0);
 
 		int framesPerTick;
@@ -101,15 +113,7 @@ public class Driver extends PApplet {
 			framesPerTick = 60;
 
 		if (!paused && !userDrawing && frameCount % framesPerTick == 0) {
-			if (Settings.getDimension().isTimed()) {
-				pastGrids.add(grid.deepClone());
-
-				if (pastGrids.size() > Settings.getTimeDepth())
-					pastGrids.remove();
-			}
-
-			grid.prepareAllStates();
-			grid.updateAllStates();
+			updateGrid();
 		}
 
 		if (Settings.getDimension().isTimed()) {
@@ -128,7 +132,7 @@ public class Driver extends PApplet {
 			popMatrix();
 		} else {
 			grid.draw(this);
-		}		
+		}
 
 		if (userDrawing) {
 			noCursor();
@@ -142,6 +146,18 @@ public class Driver extends PApplet {
 		} else {
 			cursor();
 		}
+	}
+	
+	public void updateGrid() {
+		if (Settings.getDimension().isTimed()) {
+			pastGrids.add(grid.deepClone());
+
+			if (pastGrids.size() > Settings.getTimeDepth())
+				pastGrids.remove(0);
+		}
+
+		grid.prepareAllStates();
+		grid.updateAllStates();
 	}
 
 	public void mousePressed() {
@@ -160,19 +176,19 @@ public class Driver extends PApplet {
 				grid.handleClick(mouseX, mouseY, State.getState("default"));
 		}
 	}
-	
+
 	public void keyPressed() {
-		if(key == DELETE) {
+		if (key == DELETE) {
 			setup();
-		} else if(key == 'L') {
+		} else if (key == 'L') {
 			JFileChooser fileChooser = new JFileChooser("./");
-			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File f = fileChooser.getSelectedFile();
 				setupAutomata(f);
 			}
-		} else if(key == 'S') {
+		} else if (key == 'S') {
 			JFileChooser fileChooser = new JFileChooser("./");
-			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File f = fileChooser.getSelectedFile();
 				Settings.saveToJSON(f, grid);
 			}
@@ -185,13 +201,20 @@ public class Driver extends PApplet {
 		} else if (key == CODED) {
 			if (keyCode == UP || keyCode == DOWN) {
 				speed = constrain(speed + (keyCode == UP ? -1 : 1), 0, 2);
-			}
-			else if(keyCode == RIGHT) {
-				grid.prepareAllStates();
-				grid.updateAllStates();
-			}
-			else if(keyCode == LEFT) {
-				grid.revert();
+			} else if (keyCode == RIGHT) {
+				updateGrid();
+			} else if (keyCode == LEFT) {
+				try {
+					grid.revert();
+					
+					if (Settings.getDimension().isTimed()) {
+						pastGrids.add(0, pastGrids.getFirst().revert().deepClone());
+
+						if (pastGrids.size() > Settings.getTimeDepth())
+							pastGrids.remove(pastGrids.size() - 1);
+					}
+				} catch (EmptyStackException e) {
+				}
 			}
 		} else if (userDrawing) {
 			State newState = State.getStateFromHotkey(key);
