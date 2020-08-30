@@ -67,14 +67,10 @@ public class Driver extends PApplet {
 
 		pastGrids = new LinkedList<Grid>();
 		pastGrids.add(grid.deepClone());
-<<<<<<< HEAD
 
 		// TODO save initial state
 		// TODO _TIME (stepping backwards)
 		// FIXME one dimension everything
-=======
-		
->>>>>>> branch 'master' of https://github.com/tiedyeguy/GenericCellularAutomata.git
 	}
 	
 	public void draw() {
