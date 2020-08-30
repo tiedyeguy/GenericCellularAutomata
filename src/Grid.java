@@ -161,9 +161,13 @@ public class Grid {
 	 */
 	public void handleClick(int mouseX, int mouseY, State penState) {
 		try {
+			// FIXME one dimensional drawing might not have color association?
+			System.out.println((int) Math.floor(mouseY / Cell.getSize().y) + " " + (int) Math.floor(mouseX / Cell.getSize().x));
+			
 			cells[0][(int) Math.floor(mouseY / Cell.getSize().y)][(int) Math.floor(mouseX / Cell.getSize().x)]
 					.setState(penState);
 		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("out");
 		}
 	}
 
@@ -207,12 +211,29 @@ public class Grid {
 	 * @param sketch to draw to
 	 */
 	public void draw(PApplet sketch) {
+		if(!Settings.getDimension().isDrawn2D()) {
+			sketch.stroke(0, 255, 0);
+			sketch.noFill();
+			
+			sketch.pushMatrix();
+			sketch.translate(Settings.getXDimension() * Cell.getSize().x / 2,
+					Settings.getYDimension() * Cell.getSize().y / 2,
+					Settings.getZDimension() * Cell.getSize().z / 2);
+			
+			sketch.box(Settings.getXDimension() * Cell.getSize().x,
+					Settings.getYDimension() * Cell.getSize().y,
+					Settings.getZDimension() * Cell.getSize().z);
+			
+			sketch.popMatrix();
+		}
+		sketch.stroke(255);
+		
 		sketch.pushMatrix();
 
 		for (int z = 0; z < cells.length; z++) {
 			for (int y = 0; y < cells[z].length; y++) {
 				for (int x = 0; x < cells[z][y].length; x++) {
-					if (!cells[z][y][x].getState().getName().equals("default"))
+//					if (!cells[z][y][x].getState().getName().equals("default"))
 						cells[z][y][x].draw(sketch);
 					sketch.translate(Cell.getSize().x, 0, 0);
 				}

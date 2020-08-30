@@ -96,11 +96,10 @@ public class Driver extends PApplet {
 		stroke(0);
 
 		// TODO save initial state
-		// FIXME one dimension everything
 	}
 
 	public void draw() {
-		println(frameRate);
+//		println(frameRate);
 
 		background(0);
 
