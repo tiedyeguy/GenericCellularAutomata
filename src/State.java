@@ -16,7 +16,7 @@ public class State implements Jsonable {
 	private int red, green, blue;
 	private char hotkey; 
 	private ArrayList<Rule> ruleset;
-	
+
 	/**
 	 * Gets a list of all the states in this cellular automata
 	 * @return - List of state objects containing hotkey, color, user-given name, etc.
@@ -24,7 +24,7 @@ public class State implements Jsonable {
 	public static List<State> getAllStates() {
 		return states.values().stream().collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * Gets the state associated with given stateName
 	 * @param stateName - the user given name for this state
@@ -33,7 +33,7 @@ public class State implements Jsonable {
 	public static State getState(String stateName) {
 		return states.get(stateName);
 	}
-	
+
 	/**
 	 * Gets the state associated with the given hotkey
 	 * @param hotkey
@@ -41,15 +41,15 @@ public class State implements Jsonable {
 	 */
 	public static State getStateFromHotkey(char hotkey) {
 		List<State> allState = State.getAllStates();
-		
+
 		List<State> matchingState = allState.stream().filter((state) -> state.getHotkey() == hotkey).collect(Collectors.toList());
-	
+
 		if(matchingState.size() > 1) throw new IllegalStateException("Only one state should be associated with each hotkey");
 		else if(matchingState.size() == 0) return null;
-		
+
 		return matchingState.get(0);
 	}
-	
+
 	public State(String stateName) {
 		ruleset = new ArrayList<Rule>();
 		name = stateName;
@@ -66,7 +66,7 @@ public class State implements Jsonable {
 	public void setHotkey(char hotkey) {
 		this.hotkey = hotkey;
 	}
-	
+
 	/**
 	 * Get the hotkey associated with this state
 	 * @return - Will be ' ' if no hotkey was set
@@ -74,7 +74,7 @@ public class State implements Jsonable {
 	public char getHotkey() {
 		return hotkey;
 	}
-	
+
 	/**
 	 * Gets the amount of red in the color associated with this state
 	 * @return - integer form of the color, one byte. Default 0
@@ -82,7 +82,7 @@ public class State implements Jsonable {
 	public int getRed() {
 		return red;
 	}
-	
+
 	/**
 	 * Gets the amount of green in the color associated with this state
 	 * @return - integer form of the color, one byte. Default 0
@@ -90,7 +90,7 @@ public class State implements Jsonable {
 	public int getGreen() {
 		return green;
 	}
-	
+
 	/**
 	 * Gets the amount of blue in the color associated with this state
 	 * @return - integer form of the color, one byte. Default 0
@@ -98,7 +98,7 @@ public class State implements Jsonable {
 	public int getBlue() {
 		return blue;
 	}
-	
+
 	/**
 	 * Sets the color of the state to specified value
 	 * @param color - the color of this state
@@ -108,7 +108,7 @@ public class State implements Jsonable {
 		green = Integer.parseInt(color.substring(2, 4), 16);
 		blue = Integer.parseInt(color.substring(4, 6), 16);
 	}
-	
+
 	/**
 	 * Gets the name associated with this state
 	 * @return - The name of the state, always can be used with State.getState
@@ -129,7 +129,7 @@ public class State implements Jsonable {
 		}
 		states.values().forEach((state)->state.loadFromJSON(rulesObj.getJSONObject(state.getName())));
 	}
-	
+
 	/**
 	 * Creates the ruleset for this cellular automata based on the given integer, for Rules1D automata
 	 * @param ruleNumber - The number that defines which rules this is
@@ -138,13 +138,27 @@ public class State implements Jsonable {
 		State liveState = new State("live");
 		liveState.setColor("FFFFFF");
 		State deadState = new State("default");
-		
+
 		SimpleRule simpleRule = new SimpleRule(ruleNumber);
-		
+
 		liveState.getRules().add(simpleRule);
 		deadState.getRules().add(simpleRule);
 		states.put("live", liveState);
 		states.put("default", deadState);
+	}
+
+	/**
+	 * Saves the ruleset as JSON
+	 * @return - JSON representation of all the rules
+	 */
+	public static JSONObject saveRuleset() {
+		if(Settings.isSimpleRuleset()) {
+			return states.get("default").getRules().get(0).saveToJson();
+		} else {
+			JSONObject ruleset = new JSONObject();
+			states.forEach((name, state)->ruleset.setJSONObject(name, state.saveToJson()));
+			return ruleset;
+		}
 	}
 
 	/**
@@ -163,18 +177,22 @@ public class State implements Jsonable {
 			if(stateAttributeName.equals("color")) {
 				setColor(jsonable.getString(stateAttributeName));
 			} else if(stateAttributeName.equals("hotkey")) {
-				setHotkey(jsonable.getString(stateAttributeName).charAt(0));
+				setHotkey(jsonable.getString(stateAttributeName).toLowerCase().charAt(0));
 			} else {
 				ruleset.add(new ComplexRule(jsonable.getJSONObject(stateAttributeName), State.getState(stateAttributeName)));					
 			}
 		}
 	}
-	
+
 
 	@Override
 	public JSONObject saveToJson() {
 		JSONObject stateJson = new JSONObject();
-		stateJson.setString("color", Integer.toHexString(red<<16 | green<<8 | blue));
+		String color = Integer.toHexString(red<<16 | green<<8 | blue);
+		while(color.length() < 6) {
+			color = "0" + color;
+		}
+		stateJson.setString("color", color);
 		stateJson.setString("hotkey", ""+hotkey);
 		ruleset.forEach((rule)->stateJson.setJSONObject(rule.getState().getName(),rule.saveToJson()));
 		return stateJson;

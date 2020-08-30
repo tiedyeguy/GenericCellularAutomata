@@ -51,7 +51,7 @@ public class Settings {
 			
 			Settings.wrapping = automataObj.getBoolean("wrap");
 			Settings.dimension = Dimension.valueOfLabel(automataObj.getString("dimensions", "2"));
-			Settings.neighborType = NeighborType.typeOfChar((automataObj.getString("type", "M")).charAt(0));
+			Settings.neighborType = NeighborType.typeOfChar((automataObj.getString("type", "M")).toLowerCase().charAt(0));
 			JSONObject size = automataObj.getJSONObject("size");
 			Settings.xSize = size.getInt("x", 1);
 			Settings.ySize = size.getInt("y", 1);
@@ -134,6 +134,10 @@ public class Settings {
 		savedJSON.setJSONObject("size", size);
 		savedJSON.setString("dimension", dimension.value);
 		savedJSON.setString("neighborType", ""+neighborType.type);
+		if(isSimple)
+			savedJSON.setJSONObject("rules", State.saveRuleset());
+		else
+			savedJSON.setString("rules", State.saveRuleset().getString("rules"));
 		JSONArray initialState = g.getJsonArray();
 		if(initialState != null)
 			savedJSON.setJSONArray("initial_state", initialState);

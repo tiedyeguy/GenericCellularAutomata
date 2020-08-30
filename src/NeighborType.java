@@ -13,7 +13,7 @@ public enum NeighborType {
 
 	public static NeighborType typeOfChar(char type) {
 	    for (NeighborType e : values()) {
-	        if (e.type == type) {
+	    	if (e.type == type) {
 	            return e;
 	        }
 	    }

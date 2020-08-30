@@ -33,19 +33,35 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		setupAutomata(new File("test.json"));
+		File default_json = new File("startup.json");
+		if(default_json.exists()) {
+			setupAutomata(default_json);
+		} else {			
+			JFileChooser fileChooser = new JFileChooser("./");
+			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File f = fileChooser.getSelectedFile();
+				setupAutomata(f);
+			}
+		}
 	}
 
 	private void setupAutomata(File inputFile) {
 		JSONArray init_state = Settings.init(inputFile);
+		
 		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
 
 		if (init_state != null) {
 			int i = 0;
 			JSONObject initCell = init_state.getJSONObject(i);
 			while (initCell != null) {
-				grid.setCellStateAtPos(initCell.getInt("x"), initCell.getInt("y", 0), initCell.getInt("z", 0),
-						State.getState(initCell.getString("state")));
+				State cellState = State.getState(initCell.getString("state", "default"));
+				if(cellState == null) {
+					System.err.println("STATE " + initCell.getString("state") + " IS NOT A VALID STATE. ONLY " + 
+							State.getAllStates().stream().map((state)->state.getName()).reduce((acc, next)->acc+" "+next).get()
+							+ "EXIST");
+					System.exit(0);
+				}
+				grid.setCellStateAtPos(initCell.getInt("x"), initCell.getInt("y", 0), initCell.getInt("z", 0), cellState);
 				i++;
 				initCell = init_state.getJSONObject(i, null);
 			}
