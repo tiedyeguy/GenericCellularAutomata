@@ -5,7 +5,7 @@
     "y": 100
   },
   "time-depth": 30,
-  "dimensions": "2",
+  "dimensions": "2-time",
   "wrap": false,
   "rules": {
     "default": {

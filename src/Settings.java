@@ -118,6 +118,32 @@ public class Settings {
 	}
 	
 	/**
+	 * Flips whether the dimension is timed
+	 * @param trackPast - If true, the past will be tracked. If false, untracked
+	 */
+	public static void trackTime(boolean trackPast) {
+		if(dimension.isTimed() && !trackPast) {
+			if(dimension == Dimension.ONE_TIME) {
+				dimension = Dimension.ONE;
+			} else if(dimension == Dimension.TWO_TIME) {
+				dimension = Dimension.TWO;
+			}
+		} else if(!dimension.isTimed() && trackPast) {
+			if(dimension == Dimension.ONE) {
+				if(time_depth == 1) {
+					time_depth = 50;
+				}
+				dimension = Dimension.ONE_TIME;
+			} else if(dimension == Dimension.TWO) {
+				if(time_depth == 1) {
+					time_depth = 50;
+				}
+				dimension = Dimension.TWO_TIME;
+			}
+		}  
+	}
+	
+	/**
 	 * Saves settings to JSON file
 	 * @param jsonFile - the file to save JSON settings to
 	 * @param grid - needs the grid in order to save initial state
@@ -132,9 +158,12 @@ public class Settings {
 		if(zSize > 1)
 			size.setInt("z", zSize);
 		savedJSON.setJSONObject("size", size);
-		savedJSON.setString("dimension", dimension.value);
+		savedJSON.setString("dimensions", dimension.value);
+		if(dimension.isTimed()) {
+			savedJSON.setInt("time-depth", time_depth);
+		}
 		savedJSON.setString("neighborType", ""+neighborType.type);
-		if(isSimple)
+		if(!isSimple)
 			savedJSON.setJSONObject("rules", State.saveRuleset());
 		else
 			savedJSON.setString("rules", State.saveRuleset().getString("rules"));
