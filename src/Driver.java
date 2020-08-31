@@ -206,7 +206,7 @@ public class Driver extends PApplet {
 						grid.revert();
 
 						if (Settings.getDimension().isTimed()) {
-							pastGrids.add(0, pastGrids.getFirst().revert().deepClone());
+							pastGrids.add(0, pastGrids.getFirst().deepClone().revert());
 
 							if (pastGrids.size() > Settings.getTimeDepth())
 								pastGrids.remove(pastGrids.size() - 1);

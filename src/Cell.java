@@ -81,6 +81,8 @@ public class Cell {
 	 * Updates the state of the cell with the prepared state
 	 */
 	public void updateState() {
+		pastStates.push(new PrevStateInfo(ticksOnCurrState, state));
+		
 		if (state == nextState) {
 			if (ticksOnCurrState < state.getFadeFrames()) {
 				ticksOnCurrState++;
@@ -89,7 +91,6 @@ public class Cell {
 			ticksOnCurrState = 0;
 		}
 
-		pastStates.push(new PrevStateInfo(ticksOnCurrState, state));
 		state = nextState;
 	}
 
@@ -100,10 +101,7 @@ public class Cell {
 		nextState = state;
 		PrevStateInfo pastStateInfo = pastStates.pop();
 		state = pastStateInfo.getState();
-
-//		if (ticksOnCurrState != 0)
-			ticksOnCurrState = pastStateInfo.getTicksOnCurrState();
-
+		ticksOnCurrState = pastStateInfo.getTicksOnCurrState();
 	}
 
 	/**
