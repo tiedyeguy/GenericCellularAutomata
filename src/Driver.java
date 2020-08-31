@@ -23,7 +23,7 @@ public class Driver extends PApplet {
 	State penState;
 	int speed = 1;
 	LinkedList<Grid> pastGrids;
-	
+
 	public static void main(String[] args) {
 		PApplet.main("Driver");
 	}
@@ -89,8 +89,6 @@ public class Driver extends PApplet {
 		pastGrids.add(grid.deepClone());
 
 		// TODO rendering without stroke is about 3 times faster - include option?
-//		noStroke();
-		stroke(0);
 
 		// TODO save initial state
 	}
@@ -112,7 +110,7 @@ public class Driver extends PApplet {
 			updateGrid();
 		}
 
-		if (Settings.getDimension().isTimed()) {
+		if (Settings.getDimension().isTimed() && !userDrawing) {
 			Iterator<Grid> i = pastGrids.iterator();
 
 			pushMatrix();
@@ -143,7 +141,7 @@ public class Driver extends PApplet {
 			cursor();
 		}
 	}
-	
+
 	public void updateGrid() {
 		if (Settings.getDimension().isTimed()) {
 			pastGrids.add(grid.deepClone());
@@ -198,18 +196,21 @@ public class Driver extends PApplet {
 			if (keyCode == UP || keyCode == DOWN) {
 				speed = constrain(speed + (keyCode == UP ? -1 : 1), 0, 2);
 			} else if (keyCode == RIGHT) {
-				updateGrid();
+				if (paused || userDrawing)
+					updateGrid();
 			} else if (keyCode == LEFT) {
-				try {
-					grid.revert();
-					
-					if (Settings.getDimension().isTimed()) {
-						pastGrids.add(0, pastGrids.getFirst().revert().deepClone());
+				if (paused || userDrawing) {
+					try {
+						grid.revert();
 
-						if (pastGrids.size() > Settings.getTimeDepth())
-							pastGrids.remove(pastGrids.size() - 1);
+						if (Settings.getDimension().isTimed()) {
+							pastGrids.add(0, pastGrids.getFirst().revert().deepClone());
+
+							if (pastGrids.size() > Settings.getTimeDepth())
+								pastGrids.remove(pastGrids.size() - 1);
+						}
+					} catch (EmptyStackException e) {
 					}
-				} catch (EmptyStackException e) {
 				}
 			}
 		} else if (userDrawing) {
