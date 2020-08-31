@@ -188,7 +188,7 @@ public class Driver extends PApplet {
 			JFileChooser fileChooser = new JFileChooser("./");
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File f = fileChooser.getSelectedFile();
-				Settings.saveToJSON(f, grid);
+				Settings.saveToJSON(grid).save(f, "");
 			}
 
 		} else if (key == ' ') {

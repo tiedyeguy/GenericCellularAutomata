@@ -145,10 +145,10 @@ public class Settings {
 	
 	/**
 	 * Saves settings to JSON file
-	 * @param jsonFile - the file to save JSON settings to
 	 * @param grid - needs the grid in order to save initial state
+	 * @return - JSON object containing file
 	 */
-	public static void saveToJSON(File jsonFile, Grid g) {
+	public static JSONObject saveToJSON(Grid g) {
 		JSONObject savedJSON = new JSONObject();
 		savedJSON.setBoolean("wrap", wrapping);
 		JSONObject size = new JSONObject();
@@ -170,6 +170,6 @@ public class Settings {
 		JSONArray initialState = g.getJsonArray();
 		if(initialState != null)
 			savedJSON.setJSONArray("initial_state", initialState);
-		savedJSON.save(jsonFile, "");
+		return savedJSON;
 	}
 }
