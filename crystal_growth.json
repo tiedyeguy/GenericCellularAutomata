@@ -23,6 +23,8 @@
       }
     },
     "live": {
+      "first-color": "FF0000",
+      "fade-frames": 5,
       "color": "FFFFFF"
     }
   }

@@ -14,6 +14,7 @@ public class Cell {
 	private State state;
 	private State nextState = State.getState("default");
 	private Stack<State> pastStates;
+	private int ticksOnCurrState = 0;
 
 	public Cell() {
 		pastStates = new Stack<State>();
@@ -50,6 +51,8 @@ public class Cell {
 		clone.state = state;
 		clone.nextState = nextState;
 
+		clone.ticksOnCurrState = ticksOnCurrState;
+
 		return clone;
 	}
 
@@ -78,6 +81,14 @@ public class Cell {
 	 * Updates the state of the cell with the prepared state
 	 */
 	public void updateState() {
+		if (state == nextState) {
+			if(ticksOnCurrState <= state.getFadeFrames()) {
+				ticksOnCurrState++;
+			}
+		} else {
+			ticksOnCurrState = 0;
+		}
+
 		pastStates.push(state);
 		state = nextState;
 	}
@@ -99,11 +110,24 @@ public class Cell {
 		sketch.pushMatrix();
 
 		sketch.translate(Cell.getSize().x / 2, Cell.getSize().y / 2, Cell.getSize().z / 2);
-		sketch.fill(state.getRed(), state.getGreen(), state.getBlue());
+
+//		if (state != State.getState("default"))
+//			System.out.println(Math.abs(state.getFirstGreen() - state.getGreen()) / (float) state.getFadeFrames()
+//			* ticksOnCurrState);
+
+		int r = (int) ((Math.abs(state.getFirstRed() - state.getRed())) / (float) state.getFadeFrames())
+				* ticksOnCurrState + state.getFirstRed();
+		int g = ((int) ((Math.abs(state.getFirstGreen() - state.getGreen())) / (float) state.getFadeFrames())
+				* ticksOnCurrState + state.getFirstGreen());
+		int b = (int) ((Math.abs(state.getFirstBlue() - state.getBlue())) / (float) state.getFadeFrames())
+				* ticksOnCurrState + state.getFirstBlue();
+
+		System.out.println(r + " " + g + " " + b + " " + state.getFirstBlue());
+		sketch.fill(r, g, b);
 		// TODO update optimization - could perform updates recursively with neighbors?
 
 		sketch.box(Cell.getSize().x, Cell.getSize().y, Cell.getSize().z);
-		
+
 		sketch.popMatrix();
 	}
 }

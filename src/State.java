@@ -227,9 +227,9 @@ public class State implements Jsonable {
 		for(Object stateAttribute : jsonable.keys()) {
 			String stateAttributeName = (String)stateAttribute;
 			if(stateAttributeName.equals("color")) {
-				setColor(jsonable.getString(stateAttributeName), false);
-			} else if(stateAttributeName.equals("first-color")) {
 				setColor(jsonable.getString(stateAttributeName), true);
+			} else if(stateAttributeName.equals("first-color")) {
+				setColor(jsonable.getString(stateAttributeName), false);
 			} else if(stateAttributeName.equals("fade-frames")) {
 				fadeFrames = jsonable.getInt(stateAttributeName);
 			} else if(stateAttributeName.equals("hotkey")) {
