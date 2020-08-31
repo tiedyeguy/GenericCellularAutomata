@@ -207,7 +207,7 @@ public class Grid {
 	 * @param sketch to draw to
 	 */
 	public void draw(PApplet sketch) {
-		if (!Settings.getDimension().isDrawn2D()) {
+		if (Settings.getDimension().getDimensionNumber() == 3) {
 			sketch.stroke(0, 255, 0);
 			sketch.noFill();
 

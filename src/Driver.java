@@ -15,7 +15,7 @@ import processing.data.JSONObject;
  * Handles drawing and drives the program
  */
 public class Driver extends PApplet {
-	File default_json;
+
 	Grid grid;
 	PeasyCam camera;
 	boolean userDrawing;
@@ -33,8 +33,10 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		default_json = new File("startup.json");
-		
+		// TODO I don't know if you can do anything about this, but it'd be nice if this
+		// popup was focused at the start
+
+		File default_json = new File("startup.json");
 		if (default_json.exists()) {
 			setupAutomata(default_json);
 		} else {
@@ -51,7 +53,7 @@ public class Driver extends PApplet {
 
 		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
 
-		if (init_state != null) {
+		if (init_state != null) {		
 			int i = 0;
 			JSONObject initCell = init_state.getJSONObject(i);
 			while (initCell != null) {
@@ -173,7 +175,7 @@ public class Driver extends PApplet {
 
 	public void keyPressed() {
 		if (key == DELETE) {
-			setupAutomata(default_json);
+			setup();
 		} else if (key == 'L') {
 			JFileChooser fileChooser = new JFileChooser("./");
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {

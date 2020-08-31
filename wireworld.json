@@ -1,5 +1,6 @@
 {
   "neighborType": "m",
+  "time-depth": 75,
   "size": {
     "x": 15,
     "y": 15
@@ -235,10 +236,11 @@
     }
   ],
   "wrap": true,
-  "dimension": "2",
+  "dimensions": "2-time",
   "rules": {
     "default": {},
     "wire": {
+      "first-color": "FF0000",
       "color": "FFFF00",
       "hotkey": "w",
       "head": {
@@ -246,14 +248,14 @@
       }
     },
     "head": {
-      "color": "FF0000",
+      "color": "0000FF",
       "hotkey": "w",
       "tail": {
         "any": "0-8"
       }
     },
     "tail": {
-      "color": "0000FF",
+      "color": "FF0000",
       "hotkey": "t",
       "wire": {
         "any": "0-8"
