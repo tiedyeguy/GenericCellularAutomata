@@ -53,7 +53,7 @@ public class Driver extends PApplet {
 
 		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
 
-		if (init_state != null) {		
+		if (init_state != null) {
 			int i = 0;
 			JSONObject initCell = init_state.getJSONObject(i);
 			while (initCell != null) {
@@ -176,6 +176,8 @@ public class Driver extends PApplet {
 	public void keyPressed() {
 		if (key == DELETE) {
 			setup();
+		} else if (key == 'H') {
+			Settings.trackTime(!Settings.getDimension().isTimed());
 		} else if (key == 'L') {
 			JFileChooser fileChooser = new JFileChooser("./");
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {

@@ -1,0 +1,74 @@
+{
+  "initial_state": [
+    {
+      "x": 5,
+      "y": 5,
+      "z": 5,
+      "state": "rock"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": 5,
+      "state": "rock"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "z": 5,
+      "state": "rock"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "state": "paper"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 1,
+      "state": "paper"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 1,
+      "state": "paper"
+    }
+  ],
+  "size": {
+    "x": 10,
+    "y": 10,
+    "z": 10
+  },
+  "type": "M",
+  "dimensions": 3,
+  "wrap": false,
+  "rules": {
+    "default": {
+      "color": "000000",
+      "scissors": {
+        "default": "0-26"
+      }
+    },
+    "scissors": {
+      "color": "FF0000",
+      "rock": {
+        "rock": "3-26"
+      }
+    },
+    "paper": {
+      "color": "00FF00",
+      "scissors": {
+        "scissors": "3-26"
+      }
+    },
+    "rock": {
+      "color": "0000FF",
+      "paper": {
+        "paper": "3-26"
+      }
+    }
+  }
+}
