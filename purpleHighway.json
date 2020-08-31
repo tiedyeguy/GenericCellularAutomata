@@ -1,0 +1,23 @@
+{
+  "initial_state": [{"x": 99, "y": 99, "state": "live"}],
+  "size": {
+    "x": 100,
+    "y": 100
+  },
+  "time-depth": 30,
+  "dimensions": "2",
+  "wrap": false,
+  "rules": {
+    "default": {
+      "live": {
+        "live": 1-3
+      }
+    },
+    "live": {
+      "color": "FF00FF",
+      "default": {
+        "live": "0-1, 6-8"
+      }
+    }
+  }
+}
