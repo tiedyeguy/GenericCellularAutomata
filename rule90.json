@@ -1,0 +1,12 @@
+{
+    "initial_state": [
+     {"x":0, "y":0, "state": "live"}],
+  "size": {
+    "x": 50
+  },
+  "type": "M",
+  "dimensions": "1-time",
+  "time-depth": 20,
+  "wrap": false,
+  "rules": 90
+}
