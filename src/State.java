@@ -15,6 +15,7 @@ public class State implements Jsonable {
 	private String name;
 	private boolean fades;
 	private int red, green, blue, redF, greenF, blueF;
+	private int fadeFrames;
 	private char hotkey; 
 	private ArrayList<Rule> ruleset;
 
@@ -56,6 +57,7 @@ public class State implements Jsonable {
 		fades = false;
 		name = stateName;
 		hotkey = ' ';
+		fadeFrames = 3;
 		red = 0;
 		green = 0;
 		blue = 0;
@@ -131,6 +133,14 @@ public class State implements Jsonable {
 	 */
 	public boolean stateFades() {
 		return fades;
+	}
+	
+	/**
+	 * If stateFades() is true, this will represent the number of frames a state should take to transition from first colors to final
+	 * @return - Integer number of frames a state takes to fade, 3 if unspecified
+	 */
+	public int getFadeFrames() {
+		return fadeFrames;
 	}
 	
 	/**
@@ -220,6 +230,8 @@ public class State implements Jsonable {
 				setColor(jsonable.getString(stateAttributeName), false);
 			} else if(stateAttributeName.equals("first-color")) {
 				setColor(jsonable.getString(stateAttributeName), true);
+			} else if(stateAttributeName.equals("fade-frames")) {
+				fadeFrames = jsonable.getInt(stateAttributeName);
 			} else if(stateAttributeName.equals("hotkey")) {
 				setHotkey(jsonable.getString(stateAttributeName).toLowerCase().charAt(0));
 			} else {
