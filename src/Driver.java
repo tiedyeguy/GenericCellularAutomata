@@ -2,7 +2,6 @@ import java.io.File;
 import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 
@@ -16,7 +15,7 @@ import processing.data.JSONObject;
  * Handles drawing and drives the program
  */
 public class Driver extends PApplet {
-
+	File default_json;
 	Grid grid;
 	PeasyCam camera;
 	boolean userDrawing;
@@ -34,10 +33,8 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		// TODO I don't know if you can do anything about this, but it'd be nice if this
-		// popup was focused at the start
-
-		File default_json = new File("startup.json");
+		default_json = new File("startup.json");
+		
 		if (default_json.exists()) {
 			setupAutomata(default_json);
 		} else {
@@ -178,7 +175,7 @@ public class Driver extends PApplet {
 
 	public void keyPressed() {
 		if (key == DELETE) {
-			setup();
+			setupAutomata(default_json);
 		} else if (key == 'L') {
 			JFileChooser fileChooser = new JFileChooser("./");
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {

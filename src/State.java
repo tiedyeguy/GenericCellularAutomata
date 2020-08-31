@@ -13,7 +13,8 @@ import processing.data.JSONObject;
 public class State implements Jsonable {
 	private static Map<String, State> states = new HashMap<String, State>();
 	private String name;
-	private int red, green, blue;
+	private boolean fades;
+	private int red, green, blue, redF, greenF, blueF;
 	private char hotkey; 
 	private ArrayList<Rule> ruleset;
 
@@ -52,6 +53,7 @@ public class State implements Jsonable {
 
 	public State(String stateName) {
 		ruleset = new ArrayList<Rule>();
+		fades = false;
 		name = stateName;
 		hotkey = ' ';
 		red = 0;
@@ -100,13 +102,53 @@ public class State implements Jsonable {
 	}
 
 	/**
+	 * Gets the amount of red in the color associated with this state initially. Only use if stateFades()
+	 * @return - integer form of the color, one byte. Default 0
+	 */
+	public int getFirstRed() {
+		return redF;
+	}
+
+	/**
+	 * Gets the amount of green in the color associated with this state initially. Only use if stateFades()
+	 * @return - integer form of the color, one byte. Default 0
+	 */
+	public int getFirstGreen() {
+		return greenF;
+	}
+
+	/**
+	 * Gets the amount of blue in the color associated with this state initially. Only use if stateFades()
+	 * @return - integer form of the color, one byte. Default 0
+	 */
+	public int getFirstBlue() {
+		return blueF;
+	}
+	
+	/**
+	 * True iff this state fades from initial colors to final colors
+	 * @return - True if the state fades from getFirstRed()->getRed() and getFirstGreen()->getGreen() etc.
+	 */
+	public boolean stateFades() {
+		return fades;
+	}
+	
+	/**
 	 * Sets the color of the state to specified value
 	 * @param color - the color of this state
+	 * @param firstColor - If the color is the initial state color, true, if this is the final state color, false
 	 */
-	public void setColor(String color) {
-		red = Integer.parseInt(color.substring(0, 2), 16);
-		green = Integer.parseInt(color.substring(2, 4), 16);
-		blue = Integer.parseInt(color.substring(4, 6), 16);
+	public void setColor(String color, boolean firstColor) {
+		if(firstColor) {
+			red = Integer.parseInt(color.substring(0, 2), 16);
+			green = Integer.parseInt(color.substring(2, 4), 16);
+			blue = Integer.parseInt(color.substring(4, 6), 16);
+		} else {
+			fades = true;
+			redF = Integer.parseInt(color.substring(0, 2), 16);
+			greenF = Integer.parseInt(color.substring(2, 4), 16);
+			blueF = Integer.parseInt(color.substring(4, 6), 16);
+		}
 	}
 
 	/**
@@ -136,7 +178,7 @@ public class State implements Jsonable {
 	 */
 	public static void createRuleset(int ruleNumber) {
 		State liveState = new State("live");
-		liveState.setColor("FFFFFF");
+		liveState.setColor("FFFFFF", false);
 		State deadState = new State("default");
 
 		SimpleRule simpleRule = new SimpleRule(ruleNumber);
@@ -175,7 +217,9 @@ public class State implements Jsonable {
 		for(Object stateAttribute : jsonable.keys()) {
 			String stateAttributeName = (String)stateAttribute;
 			if(stateAttributeName.equals("color")) {
-				setColor(jsonable.getString(stateAttributeName));
+				setColor(jsonable.getString(stateAttributeName), false);
+			} else if(stateAttributeName.equals("first-color")) {
+				setColor(jsonable.getString(stateAttributeName), true);
 			} else if(stateAttributeName.equals("hotkey")) {
 				setHotkey(jsonable.getString(stateAttributeName).toLowerCase().charAt(0));
 			} else {

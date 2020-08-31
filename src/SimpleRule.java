@@ -31,8 +31,10 @@ public class SimpleRule extends Rule {
 		}
 		int stateAcceptDigit = (rule>>(stateNumber))%2;
 		
+		
 		result = stateAcceptDigit == 1 ? State.getState("live") : State.getState("default");
 		
+		System.out.println(stateAcceptDigit + " " + stateNumber + " " + result.getName());
 		return true;
 	}
 

@@ -161,9 +161,6 @@ public class Grid {
 	 */
 	public void handleClick(int mouseX, int mouseY, State penState) {
 		try {
-			// FIXME one dimensional drawing might not have color association?
-			System.out.println((int) Math.floor(mouseY / Cell.getSize().y) + " " + (int) Math.floor(mouseX / Cell.getSize().x));
-			
 			cells[0][(int) Math.floor(mouseY / Cell.getSize().y)][(int) Math.floor(mouseX / Cell.getSize().x)]
 					.setState(penState);
 		} catch (ArrayIndexOutOfBoundsException e) {
