@@ -150,14 +150,14 @@ public class State implements Jsonable {
 	 */
 	public void setColor(String color, boolean firstColor) {
 		if(firstColor) {
-			red = Integer.parseInt(color.substring(0, 2), 16);
-			green = Integer.parseInt(color.substring(2, 4), 16);
-			blue = Integer.parseInt(color.substring(4, 6), 16);
-		} else {
 			fades = true;
 			redF = Integer.parseInt(color.substring(0, 2), 16);
 			greenF = Integer.parseInt(color.substring(2, 4), 16);
 			blueF = Integer.parseInt(color.substring(4, 6), 16);
+		} else {
+			red = Integer.parseInt(color.substring(0, 2), 16);
+			green = Integer.parseInt(color.substring(2, 4), 16);
+			blue = Integer.parseInt(color.substring(4, 6), 16);
 		}
 	}
 
@@ -227,9 +227,9 @@ public class State implements Jsonable {
 		for(Object stateAttribute : jsonable.keys()) {
 			String stateAttributeName = (String)stateAttribute;
 			if(stateAttributeName.equals("color")) {
-				setColor(jsonable.getString(stateAttributeName), true);
-			} else if(stateAttributeName.equals("first-color")) {
 				setColor(jsonable.getString(stateAttributeName), false);
+			} else if(stateAttributeName.equals("first-color")) {
+				setColor(jsonable.getString(stateAttributeName), true);
 			} else if(stateAttributeName.equals("fade-frames")) {
 				fadeFrames = jsonable.getInt(stateAttributeName);
 			} else if(stateAttributeName.equals("hotkey")) {

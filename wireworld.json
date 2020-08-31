@@ -236,7 +236,7 @@
     }
   ],
   "wrap": true,
-  "dimensions": "2-time",
+  "dimensions": "2",
   "rules": {
     "default": {},
     "wire": {
@@ -249,7 +249,7 @@
     },
     "head": {
       "color": "0000FF",
-      "hotkey": "w",
+      "hotkey": "h",
       "tail": {
         "any": "0-8"
       }

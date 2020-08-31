@@ -26,15 +26,14 @@ public class SimpleRule extends Rule {
 		if(neighbors.length < Math.pow(3, Settings.getDimension().getDimensionNumber()))
 			return false;
 		
-		for(int i = 0; i < neighbors.length; i++) {
+		for(int i = neighbors.length-1; i >= 0; i--) {
 			stateNumber += (neighbors[i].getState().getName().equals("default") ? 0 : 1) * ((int)Math.pow(2, i));
 		}
 		int stateAcceptDigit = (rule>>(stateNumber))%2;
 		
 		
 		result = stateAcceptDigit == 1 ? State.getState("live") : State.getState("default");
-		
-		System.out.println(stateAcceptDigit + " " + stateNumber + " " + result.getName());
+
 		return true;
 	}
 

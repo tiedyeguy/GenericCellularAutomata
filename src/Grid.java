@@ -74,7 +74,7 @@ public class Grid {
 					for (int x = cellX - 1; x <= cellX + 1; x++) {
 						if (Settings.isWrapping()) {
 							neighbors.add(cells[Math.floorMod(z, cells.length)][Math.floorMod(y, cells[0].length)][Math
-									.floorMod(x, cells[0][0].length)]);
+							                                                                                       .floorMod(x, cells[0][0].length)]);
 						} else {
 							if (x >= 0 && x < cells[0][0].length && y >= 0 && y < cells[0].length && z >= 0
 									&& z < cells.length)
