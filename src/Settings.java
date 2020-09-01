@@ -1,7 +1,3 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
@@ -25,44 +21,30 @@ public class Settings {
 	private static boolean isSimple;
 	//Represents the depth for the past if grid history is displayed
 	private static int time_depth;
-	
+
 	/**
 	 * Initializes the settings with user preferences
 	 * @param jsonAutomata - The JSON file that contains all the information for the simulation, see template on github
 	 * @return - Returns the array of the initial state, to be fed into the grid
 	 */
-	public static JSONArray init(File jsonAutomata) {
+	public static JSONArray init(JSONObject automataObj) {
 		try {
-			Scanner sc = new Scanner(jsonAutomata);
-			String jsonAsStr = "";
-			do {
-				jsonAsStr += sc.nextLine();
-			} while(sc.hasNext());
-			sc.close();
-
-			JSONObject automataObj = JSONObject.parse(jsonAsStr);
-			try {
-				State.createRuleset(automataObj.getJSONObject("rules"));			
-				Settings.isSimple = false;
-			} catch(RuntimeException e) {
-				State.createRuleset(automataObj.getInt("rules", 0));
-				Settings.isSimple = true;
-			}
-			
-			Settings.wrapping = automataObj.getBoolean("wrap");
-			Settings.dimension = Dimension.valueOfLabel(automataObj.getString("dimensions", "2"));
-			Settings.neighborType = NeighborType.typeOfChar((automataObj.getString("type", "M")).toLowerCase().charAt(0));
-			JSONObject size = automataObj.getJSONObject("size");
-			Settings.xSize = size.getInt("x", 1);
-			Settings.ySize = size.getInt("y", 1);
-			Settings.zSize = size.getInt("z", 1);
-			Settings.time_depth = automataObj.getInt("time-depth", 1);
-			return automataObj.getJSONArray("initial_state");
-		} catch (FileNotFoundException e) {
-			System.err.println("JSON Config File not found");
-			e.printStackTrace();
-			return null;
+			State.createRuleset(automataObj.getJSONObject("rules"));			
+			Settings.isSimple = false;
+		} catch(RuntimeException e) {
+			State.createRuleset(automataObj.getInt("rules", 0));
+			Settings.isSimple = true;
 		}
+
+		Settings.wrapping = automataObj.getBoolean("wrap");
+		Settings.dimension = Dimension.valueOfLabel(automataObj.getString("dimensions", "2"));
+		Settings.neighborType = NeighborType.typeOfChar((automataObj.getString("type", "M")).toLowerCase().charAt(0));
+		JSONObject size = automataObj.getJSONObject("size");
+		Settings.xSize = size.getInt("x", 1);
+		Settings.ySize = size.getInt("y", 1);
+		Settings.zSize = size.getInt("z", 1);
+		Settings.time_depth = automataObj.getInt("time-depth", 1);
+		return automataObj.getJSONArray("initial_state");
 	}
 
 	public static boolean isWrapping() {
@@ -84,7 +66,7 @@ public class Settings {
 	public static int getTimeDepth() {
 		return time_depth;
 	}
-	
+
 	/**
 	 * Gets the max X dimension of this automata
 	 * @return - integer size value
@@ -108,7 +90,7 @@ public class Settings {
 	public static int getZDimension() {
 		return zSize;
 	}
-	
+
 	/**
 	 * A simple ruleset is one represented by a binary string, consists of two states. Complex rulesets are game of life, wire world, etc.
 	 * @return - True iff the ruleset is a simple ruleset (requires cells to be in their own neighbor array), false if complex (cell not included in neighbor array)
@@ -116,7 +98,7 @@ public class Settings {
 	public static boolean isSimpleRuleset() {
 		return isSimple;
 	}
-	
+
 	/**
 	 * Flips whether the dimension is timed
 	 * @param trackPast - If true, the past will be tracked. If false, untracked
@@ -142,7 +124,7 @@ public class Settings {
 			}
 		}  
 	}
-	
+
 	/**
 	 * Saves settings to JSON file
 	 * @param grid - needs the grid in order to save initial state

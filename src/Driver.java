@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 
@@ -48,8 +49,34 @@ public class Driver extends PApplet {
 		}
 	}
 
+	/**
+	 * Sets up the automata with a file input
+	 * @param inputFile - Input file to read a JSON object from
+	 */
 	private void setupAutomata(File inputFile) {
-		JSONArray init_state = Settings.init(inputFile);
+		String jsonAsStr = "";
+		try {
+			Scanner sc = new Scanner(inputFile);
+			do {
+				jsonAsStr += sc.nextLine();
+			} while(sc.hasNext());
+			sc.close();
+		} catch(Exception e) {
+			System.err.println("JSON Config File not found");
+			e.printStackTrace();
+			return;
+		}
+
+		JSONObject automataObj = JSONObject.parse(jsonAsStr);
+		setupAutomata(automataObj);
+	}
+	
+	/**
+	 * Sets the automata with a JSON object
+	 * @param automataObj - JSON object that will be used for creation
+	 */
+	private void setupAutomata(JSONObject automataObj) {
+		JSONArray init_state = Settings.init(automataObj);
 
 		grid = new Grid(Settings.getXDimension(), Settings.getYDimension(), Settings.getZDimension());
 
@@ -61,7 +88,7 @@ public class Driver extends PApplet {
 				if (cellState == null) {
 					System.err.println("STATE " + initCell.getString("state") + " IS NOT A VALID STATE. ONLY "
 							+ State.getAllStates().stream().map((state) -> state.getName())
-									.reduce((acc, next) -> acc + " " + next).get()
+							.reduce((acc, next) -> acc + " " + next).get()
 							+ "EXIST");
 					System.exit(0);
 				}
@@ -96,7 +123,7 @@ public class Driver extends PApplet {
 	}
 
 	public void draw() {
-//		println(frameRate);
+		//		println(frameRate);
 
 		background(0);
 
@@ -188,8 +215,10 @@ public class Driver extends PApplet {
 				File f = fileChooser.getSelectedFile();
 				Settings.saveToJSON(grid).save(f, "");
 			}
-
-		} else if (key == ' ') {
+		} else if(key == 'H') { 
+			Settings.trackTime(!Settings.getDimension().isTimed());
+			setupAutomata(Settings.saveToJSON(grid));
+		} if (key == ' ') {
 			if (Settings.getDimension().isDrawn2D())
 				userDrawing = !userDrawing;
 			else
