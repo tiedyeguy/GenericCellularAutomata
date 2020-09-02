@@ -21,18 +21,26 @@ public class Settings {
 	private static boolean isSimple;
 	//Represents the depth for the past if grid history is displayed
 	private static int time_depth;
-
+	//The number of frames to record in a video, -1 if not recording
+	private static int framesToRecord;
+	//The speed of a recording in frames per second, -1 if not recording
+	private static int frameSpeed;
+	//True if the neighbors array includes itself, default false
+	private static boolean neighborsIncludeSelf;
+	
 	/**
 	 * Initializes the settings with user preferences
 	 * @param jsonAutomata - The JSON file that contains all the information for the simulation, see template on github
 	 * @return - Returns the array of the initial state, to be fed into the grid
 	 */
 	public static JSONArray init(JSONObject automataObj) {
+		Settings.neighborsIncludeSelf = automataObj.getBoolean("neighbors-include-self", false);
 		try {
 			State.createRuleset(automataObj.getJSONObject("rules"));	
 			Settings.isSimple = false;
 		} catch(RuntimeException e) {
 			State.createRuleset(automataObj.getInt("rules", 0));
+			Settings.neighborsIncludeSelf = true;
 			Settings.isSimple = true;
 		}
 
@@ -44,6 +52,8 @@ public class Settings {
 		Settings.ySize = size.getInt("y", 1);
 		Settings.zSize = size.getInt("z", 1);
 		Settings.time_depth = automataObj.getInt("time-depth", 1);
+		Settings.framesToRecord = automataObj.getInt("record-frames", -1);
+		Settings.frameSpeed = automataObj.getInt("video-speed", -1);
 		return automataObj.getJSONArray("initial_state");
 	}
 
@@ -99,6 +109,38 @@ public class Settings {
 		return isSimple;
 	}
 
+	/**
+	 * Gets the frame speed of the video recording in FPS
+	 * @return - Integer FPS, -1 if not recording
+	 */
+	public static int getFrameSpeed() {
+		return frameSpeed;
+	}
+
+	/**
+	 * Gets the number of frames to record
+	 * @return - Integer FPS, -1 if not recording
+	 */
+	public static int getFramesToRecord() {
+		return framesToRecord;
+	}
+	
+	/**
+	 * Should the cell simulation be recorded?
+	 * @return - true iff the automata should be recording
+	 */
+	public static boolean isRecording() {
+		return framesToRecord != -1;
+	}
+
+	/**
+	 * Does the neighbors array of a cell include the cell itself
+	 * @return - true iff neighbors array should include itself
+	 */
+	public static boolean doesNeighborsIncludeSelf() {
+		return neighborsIncludeSelf;
+	}
+	
 	/**
 	 * Flips whether the dimension is timed
 	 * @param trackPast - If true, the past will be tracked. If false, untracked

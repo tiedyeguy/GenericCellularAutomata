@@ -111,7 +111,7 @@ public class Grid {
 
 		neighbors = neighbors.stream().distinct().collect(Collectors.toList()); // Remove duplicates
 
-		if (!Settings.isSimpleRuleset()) {
+		if (!Settings.doesNeighborsIncludeSelf()) {
 			ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
 			justMeList.add(cells[cellZ][cellY][cellX]);
 			neighbors.removeAll(justMeList); // Remove Cell itself
