@@ -112,6 +112,8 @@ public class Driver extends PApplet {
 
 		if (paused) {
 			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * Cell.getSize().z * Settings.getZDimension(), 1000);
+		} else if(camera != null){
+			camera.setActive(false);
 		}
 
 		pastGrids = new LinkedList<Grid>();

@@ -29,7 +29,7 @@ public class Settings {
 	 */
 	public static JSONArray init(JSONObject automataObj) {
 		try {
-			State.createRuleset(automataObj.getJSONObject("rules"));			
+			State.createRuleset(automataObj.getJSONObject("rules"));	
 			Settings.isSimple = false;
 		} catch(RuntimeException e) {
 			State.createRuleset(automataObj.getInt("rules", 0));
