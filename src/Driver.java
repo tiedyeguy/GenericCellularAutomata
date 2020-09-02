@@ -23,6 +23,7 @@ public class Driver extends PApplet {
 	State penState;
 	int speed = 1;
 	LinkedList<Grid> pastGrids;
+	int ticksSoFar = 0;
 
 	public static void main(String[] args) {
 		PApplet.main("Driver");
@@ -33,9 +34,6 @@ public class Driver extends PApplet {
 	}
 
 	public void setup() {
-		// TODO I don't know if you can do anything about this, but it'd be nice if this
-		// popup was focused at the start
-
 		File default_json = new File("startup.json");
 		if (default_json.exists()) {
 			setupAutomata(default_json);
@@ -83,13 +81,16 @@ public class Driver extends PApplet {
 		userDrawing = Settings.getDimension().isDrawn2D();
 		paused = !userDrawing;
 
-		if (paused) {
+		if (!Settings.getDimension().isDrawn2D())
 			camera = new PeasyCam(this, width / 2, height / 2, 0.5 * Cell.getSize().z * Settings.getZDimension(), 1000);
-		}
+
+//		camera.setActive(!Settings.getDimension().isDrawn2D());
 
 		pastGrids = new LinkedList<Grid>();
 		pastGrids.add(grid.deepClone());
 
+		textAlign(BOTTOM, LEFT);
+		textSize(40);
 		// TODO rendering without stroke is about 3 times faster - include option?
 
 		// TODO save initial state
@@ -135,13 +136,16 @@ public class Driver extends PApplet {
 			fill(penState.getRed(), penState.getGreen(), penState.getBlue());
 
 			pushMatrix();
-			translate(mouseX, mouseY, Cell.getSize().x);
+			translate(mouseX, mouseY, 2);
 			noStroke();
-			circle(0, 0, 15);
+			circle(0, 0, Cell.getSize().x);
 			popMatrix();
 		} else {
 			cursor();
 		}
+		fill(255);
+		stroke(0);
+		text("Ticks: " + ticksSoFar, 0, height);
 	}
 
 	public void updateGrid() {
@@ -154,6 +158,8 @@ public class Driver extends PApplet {
 
 		grid.prepareAllStates();
 		grid.updateAllStates();
+
+		ticksSoFar++;
 	}
 
 	public void mousePressed() {
@@ -176,9 +182,11 @@ public class Driver extends PApplet {
 	public void keyPressed() {
 		if (key == DELETE) {
 			setup();
-		} else if (key == 'H') {
+		} else if(key == 'H') { 
 			Settings.trackTime(!Settings.getDimension().isTimed());
-		} else if (key == 'L') {
+			setupAutomata(Settings.saveToJSON(grid));
+		}
+		if (key == 'L') {
 			JFileChooser fileChooser = new JFileChooser("./");
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File f = fileChooser.getSelectedFile();
@@ -206,6 +214,7 @@ public class Driver extends PApplet {
 				if (paused || userDrawing) {
 					try {
 						grid.revert();
+						ticksSoFar--;
 
 						if (Settings.getDimension().isTimed()) {
 							pastGrids.add(0, pastGrids.getFirst().deepClone().revert());
