@@ -11,7 +11,7 @@ import processing.data.JSONObject;
  * Tracks the state of the cell
  */
 public class State implements Jsonable {
-	private static Map<String, State> states = new HashMap<String, State>();
+	private static Map<String, State> states;
 	private String name;
 	private boolean fades;
 	private int red, green, blue, redF, greenF, blueF;
@@ -175,6 +175,7 @@ public class State implements Jsonable {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void createRuleset(JSONObject rulesObj) {
+		states = new HashMap<String, State>();
 		for(String stateEntry : (Set<String>)rulesObj.keys()) {
 			State state = new State(stateEntry);
 			states.put(stateEntry, state);
@@ -187,6 +188,7 @@ public class State implements Jsonable {
 	 * @param ruleNumber - The number that defines which rules this is
 	 */
 	public static void createRuleset(int ruleNumber) {
+		states = new HashMap<String, State>();
 		State liveState = new State("live");
 		liveState.setColor("FFFFFF", false);
 		State deadState = new State("default");
