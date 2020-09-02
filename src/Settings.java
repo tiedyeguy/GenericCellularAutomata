@@ -191,6 +191,11 @@ public class Settings {
 			savedJSON.setJSONObject("rules", State.saveRuleset());
 		else
 			savedJSON.setString("rules", State.saveRuleset().getString("rules"));
+		if(Settings.frameSpeed != -1) {
+			savedJSON.setInt("record-frames", framesToRecord);
+			savedJSON.setInt("video-speed", frameSpeed);
+		}
+		savedJSON.setBoolean("neighbors-includes-self", neighborsIncludeSelf);
 		JSONArray initialState = g.getJsonArray();
 		if(initialState != null)
 			savedJSON.setJSONArray("initial_state", initialState);
