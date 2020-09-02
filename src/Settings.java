@@ -5,6 +5,9 @@ import processing.data.JSONObject;
  * Contains user preferences that don't fall under a cell state
  */
 public class Settings {
+	//Default video name for recorded videos
+	private static final String DEFAULT_VIDEO_NAME = "WhyDidntYouSpecifyTheVideoNameYouFuckingIdiot";
+	
 	//Whether the grid wraps around on itself (leftmost cells have neighbors on the right side)
 	private static boolean wrapping;
 	//Dimensions of the grid, including whether the grid tracks time
@@ -27,6 +30,8 @@ public class Settings {
 	private static int frameSpeed;
 	//True if the neighbors array includes itself, default false
 	private static boolean neighborsIncludeSelf;
+	//The name of the video if recording
+	private static String videoName;
 	
 	/**
 	 * Initializes the settings with user preferences
@@ -54,6 +59,7 @@ public class Settings {
 		Settings.time_depth = automataObj.getInt("time-depth", 1);
 		Settings.framesToRecord = automataObj.getInt("record-frames", -1);
 		Settings.frameSpeed = automataObj.getInt("video-speed", -1);
+		Settings.videoName = automataObj.getString("video-name", DEFAULT_VIDEO_NAME);
 		return automataObj.getJSONArray("initial_state");
 	}
 
@@ -134,6 +140,14 @@ public class Settings {
 	}
 
 	/**
+	 * The name that the recorded video is saved under
+	 * @return - String name of video, always a valid String even if not recording
+	 */
+	public static String getVideoName() {
+		return videoName;
+	}
+	
+	/**
 	 * Does the neighbors array of a cell include the cell itself
 	 * @return - true iff neighbors array should include itself
 	 */
@@ -194,6 +208,7 @@ public class Settings {
 		if(Settings.frameSpeed != -1) {
 			savedJSON.setInt("record-frames", framesToRecord);
 			savedJSON.setInt("video-speed", frameSpeed);
+			savedJSON.setString("video-name", videoName);
 		}
 		savedJSON.setBoolean("neighbors-includes-self", neighborsIncludeSelf);
 		JSONArray initialState = g.getJsonArray();
