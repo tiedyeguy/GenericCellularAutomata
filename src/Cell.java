@@ -40,6 +40,10 @@ public class Cell {
 		this.state = state;
 		nextState = state;
 	}
+	
+	public String toString() {
+		return state.getName();
+	}
 
 	@SuppressWarnings("unchecked")
 	public Cell deepClone() {

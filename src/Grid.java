@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -119,6 +120,19 @@ public class Grid {
 
 		Cell[] arr = new Cell[neighbors.size()];
 		return neighbors.toArray(arr);
+	}
+	
+	public String toString() {
+//		StringBuilder str = new StringBuilder("[" + cells[0][0][0]);
+		
+		return Arrays.deepToString(cells);
+//		
+//		for (int z = 0; z < cells.length; z++)
+//			for (int y = 0; y < cells[z].length; y++)
+//				for (int x = 0; x < cells[z][y].length; x++)
+//					str.append(", " + cells[z][y][x].toString());
+//		
+//		return str.toString();
 	}
 
 	/**
