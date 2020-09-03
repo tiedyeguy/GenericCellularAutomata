@@ -216,4 +216,21 @@ public class Settings {
 			savedJSON.setJSONArray("initial_state", initialState);
 		return savedJSON;
 	}
+	
+	@Override
+	public String toString() {
+		String settingsString = "Program Settings\n";
+		settingsString += "Wrap: " + wrapping + "\n";
+		settingsString += "Dimension: " + dimension.value + "\n";
+		settingsString += "Neighbor Type: " + neighborType.type + 
+				(neighborsIncludeSelf ? " (includes self) " : " (does not include self)") + "\n";
+		settingsString += "Size: (" + xSize + ", " + ySize + ", " + zSize + ")\n";
+		settingsString += "Simple Rules: " + isSimple + "\n";
+		settingsString += "Time Depth: " + time_depth + "\n";
+		settingsString += "Is Recording: " + isRecording() + "\n";
+		settingsString += "\tVideo Speed: " + frameSpeed + "fps \n";
+		settingsString += "\tNumber of Frames to Record: " + framesToRecord + "\n";
+		settingsString += "\tName of recorded video: " + videoName + "\n";
+		return settingsString;
+	}
 }

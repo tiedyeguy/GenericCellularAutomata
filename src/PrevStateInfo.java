@@ -16,4 +16,9 @@ public class PrevStateInfo {
 	public State getState() {
 		return state;
 	}
+	
+	@Override
+	public String toString() {
+		return "Ticks on state: " + ticksOnCurrState + "\nState Recorded: " + state.getName();
+	}
 }

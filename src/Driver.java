@@ -127,8 +127,6 @@ public class Driver extends PApplet {
 	}
 
 	public void draw() {
-		//		println(frameRate);
-
 		background(0);
 
 		int framesPerTick;
