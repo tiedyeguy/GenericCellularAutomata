@@ -1,16 +1,16 @@
 {
   "initial_state": [
     {
-      "x": 24,
-      "y": 24,
-      "z": 24,
+      "x": 34,
+      "y": 34,
+      "z": 34,
       "state": "live"
     }
   ],
   "size": {
-    "x": 50,
-    "y": 50,
-    "z": 50
+    "x": 70,
+    "y": 70,
+    "z": 70
   },
   "type": "N",
   "dimensions": 3,
@@ -27,5 +27,8 @@
       "fade-frames": 5,
       "color": "FFFFFF"
     }
-  }
+  },
+  "video-speed": 10,
+  "video-name": "test_crystal",
+  "record-frames": 100,
 }

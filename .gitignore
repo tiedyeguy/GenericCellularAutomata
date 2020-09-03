@@ -4,3 +4,5 @@
 test.json
 startup.json
 .settings
+/data/
+/ffmpeg/doc/

@@ -35,6 +35,9 @@
     "y": 50
   },
   "type": "M",
+  "video-speed": 60,
+  "video-name": "test",
+  "record-frames": 60,
   "dimensions": 2,
   "wrap": true,
   "rules": {
