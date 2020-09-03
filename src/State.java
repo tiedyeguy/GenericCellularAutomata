@@ -255,4 +255,14 @@ public class State implements Jsonable {
 		ruleset.forEach((rule)->stateJson.setJSONObject(rule.getState().getName(),rule.saveToJson()));
 		return stateJson;
 	}
+	
+	public String toString() {
+		String stateString = "State " + getName() + "\n";
+		if(stateFades())
+			stateString += "\tFirst Red: " + redF + ", First Blue: " + blueF + ", First Green: " + greenF + ", Transition to ";
+		stateString += "Red: " + red + ", Blue: " + blue + ", Green: " + green + "\n";
+		stateString += "\tHotkey: " + hotkey + "\n";
+		stateString += "Governed By: " + getRules();
+		return stateString;
+	}
 }

@@ -54,5 +54,8 @@ public class SimpleRule extends Rule {
 		rule = jsonable.getInt("rule");
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "Simple Rule: " + rule;
+	}
 }

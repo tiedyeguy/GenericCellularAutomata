@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import processing.data.JSONObject;
 
@@ -22,21 +23,35 @@ public class ComplexRule extends Rule {
 	
 	@Override
 	public boolean isTrue(Cell[] neighbors) {
-		Map<State, Number> neighborCounts = new HashMap<State, Number>();
+		if(anyButDefault == null) {
+			Map<State, Number> neighborCounts = new HashMap<State, Number>();
+			for (Cell neighbor : neighbors) {
+				if (neighborCounts.containsKey(neighbor.getState())) {
+					neighborCounts.put(neighbor.getState(), neighborCounts.get(neighbor.getState()).intValue() + 1);
+				} else {
+					neighborCounts.put(neighbor.getState(), 1);
+				}
+			}
 
-		for (Cell neighbor : neighbors) {
-			if (neighborCounts.containsKey(neighbor.getState())) {
-				neighborCounts.put(neighbor.getState(), neighborCounts.get(neighbor.getState()).intValue() + 1);
+			for(State discreteState : stateThresholds.keySet()) {
+				if(!stateThresholds.get(discreteState).contains(neighborCounts.getOrDefault(discreteState, 0)))
+					return false;
+			}
+			return true;
+		} else {
+			int nonDeadCount = 0;
+			State deadState = State.getState("default");
+			for(Cell neighbor : neighbors) {
+				if(!neighbor.getState().equals(deadState))
+					nonDeadCount++;
+			}
+			
+			if(anyButDefault.contains(nonDeadCount)) {
+				return true;
 			} else {
-				neighborCounts.put(neighbor.getState(), 1);
+				return false;
 			}
 		}
-		
-		for(State discreteState : stateThresholds.keySet()) {
-			if(!stateThresholds.get(discreteState).contains(neighborCounts.getOrDefault(discreteState, 0)))
-				return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -73,5 +88,17 @@ public class ComplexRule extends Rule {
 						+ " DOES NOT REFERENCE VALID STATE");
 			}
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String strThresholds = "Transitions to State: " + nextState.getName() + "\n";
+		for(Entry<State, Range> e : stateThresholds.entrySet()) {
+			strThresholds += "\t" + e.getKey() + ":" + e.getValue() + "\n";
+		}
+		if(anyButDefault != null) {
+			strThresholds += "\t" + anyButDefault + "/n";
+		}
+		return strThresholds;
 	}
 }
