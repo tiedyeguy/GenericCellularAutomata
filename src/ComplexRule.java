@@ -84,7 +84,7 @@ public class ComplexRule extends Rule {
 				Range validRange = new Range(jsonable.getString(thresholdName));
 				anyButDefault = validRange;
 			} else {
-				System.err.println("THERE WAS A PROBLEM, RULE " + thresholdName + " : "+ jsonable.getString(thresholdName) 
+				System.err.println("THERE WAS A PROBLEM " + thresholdName + " : "+ jsonable.getString(thresholdName) 
 						+ " DOES NOT REFERENCE VALID STATE");
 			}
 		}
@@ -92,9 +92,9 @@ public class ComplexRule extends Rule {
 	
 	@Override
 	public String toString() {
-		String strThresholds = "Transitions to State: " + nextState.getName() + "\n";
+		String strThresholds = "Complex Rule: Transitions to State: " + nextState.getName() + "\n";
 		for(Entry<State, Range> e : stateThresholds.entrySet()) {
-			strThresholds += "\t" + e.getKey() + ":" + e.getValue() + "\n";
+			strThresholds += "\t" + e.getKey().getName() + ":" + e.getValue() + "\n";
 		}
 		if(anyButDefault != null) {
 			strThresholds += "\t" + anyButDefault + "/n";

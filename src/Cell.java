@@ -72,7 +72,7 @@ public class Cell {
 			if (rule.isTrue(neighbors)) {
 				if (firstTrueRule != null) {
 					throw new IllegalStateException(
-							firstTrueRule.toString() + " and " + rule.toString() + " conflict with each other.");
+							firstTrueRule.toString() + "\n AND \n" + rule.toString() + " \nconflict with each other.");
 				} else {
 					firstTrueRule = rule;
 					nextState = rule.getState();

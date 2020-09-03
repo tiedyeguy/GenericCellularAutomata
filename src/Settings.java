@@ -217,8 +217,11 @@ public class Settings {
 		return savedJSON;
 	}
 	
-	@Override
-	public String toString() {
+	/**
+	 * Returns all the global settings as strings
+	 * @return
+	 */
+	public static String toStaticString() {
 		String settingsString = "Program Settings\n";
 		settingsString += "Wrap: " + wrapping + "\n";
 		settingsString += "Dimension: " + dimension.value + "\n";

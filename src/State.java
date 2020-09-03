@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import processing.data.JSONArray;
 import processing.data.JSONObject;
 
 /**
@@ -18,7 +19,8 @@ public class State implements Jsonable {
 	private int fadeFrames;
 	private char hotkey; 
 	private ArrayList<Rule> ruleset;
-
+	private boolean arrFormat;
+	
 	/**
 	 * Gets a list of all the states in this cellular automata
 	 * @return - List of state objects containing hotkey, color, user-given name, etc.
@@ -224,8 +226,21 @@ public class State implements Jsonable {
 		return ruleset;
 	}
 
+	/**
+	 * Sets up the rules based on a JSONArray of complex rules
+	 * @param ruleArray - A JSONArray consisting of appropriately formatted complex rules
+	 */
+	private void loadRules(JSONArray ruleArray) {
+		for(int i = 0; i < ruleArray.size(); i++) {
+			JSONObject ruleObject = ruleArray.getJSONObject(i);
+			String toState = (String)ruleObject.remove("toState");;
+			ruleset.add(new ComplexRule(ruleObject, State.getState(toState)));
+		}
+	}
+	
 	@Override
 	public void loadFromJSON(JSONObject jsonable) {
+		arrFormat = false;
 		for(Object stateAttribute : jsonable.keys()) {
 			String stateAttributeName = (String)stateAttribute;
 			if(stateAttributeName.equals("color")) {
@@ -236,7 +251,11 @@ public class State implements Jsonable {
 				fadeFrames = jsonable.getInt(stateAttributeName);
 			} else if(stateAttributeName.equals("hotkey")) {
 				setHotkey(jsonable.getString(stateAttributeName).toLowerCase().charAt(0));
-			} else {
+			} else if(stateAttributeName.equals("rules")) {
+				arrFormat = true;
+				loadRules(jsonable.getJSONArray(stateAttributeName));
+			}
+			else {
 				ruleset.add(new ComplexRule(jsonable.getJSONObject(stateAttributeName), State.getState(stateAttributeName)));					
 			}
 		}
@@ -252,7 +271,15 @@ public class State implements Jsonable {
 		}
 		stateJson.setString("color", color);
 		stateJson.setString("hotkey", ""+hotkey);
-		ruleset.forEach((rule)->stateJson.setJSONObject(rule.getState().getName(),rule.saveToJson()));
+		if(arrFormat) {
+			JSONArray rules = new JSONArray();
+			ruleset.forEach((rule)->{
+				
+			});
+			stateJson.setJSONArray("rules", rules);
+		} else
+			ruleset.forEach((rule)->stateJson.setJSONObject(rule.getState().getName(),rule.saveToJson()));
+		
 		return stateJson;
 	}
 	
