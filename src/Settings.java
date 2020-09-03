@@ -1,3 +1,5 @@
+import java.io.File;
+
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
@@ -60,6 +62,12 @@ public class Settings {
 		Settings.framesToRecord = automataObj.getInt("record-frames", -1);
 		Settings.frameSpeed = automataObj.getInt("video-speed", -1);
 		Settings.videoName = automataObj.getString("video-name", DEFAULT_VIDEO_NAME);
+		
+		while(new File(videoName + ".mp4").exists()) {
+			System.out.println("heppening");
+			videoName += " again";
+		}
+		
 		return automataObj.getJSONArray("initial_state");
 	}
 

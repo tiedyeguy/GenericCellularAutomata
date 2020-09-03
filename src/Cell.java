@@ -40,7 +40,7 @@ public class Cell {
 		this.state = state;
 		nextState = state;
 	}
-	
+
 	public String toString() {
 		return state.getName();
 	}
@@ -49,7 +49,8 @@ public class Cell {
 	public Cell deepClone() {
 		Cell clone = new Cell();
 
-		clone.pastStates = (Stack<PrevStateInfo>) pastStates.clone();
+		if (!Settings.isRecording())
+			clone.pastStates = (Stack<PrevStateInfo>) pastStates.clone();
 		clone.neighbors = Arrays.copyOf(neighbors, neighbors.length);
 
 		clone.state = state;
@@ -85,8 +86,9 @@ public class Cell {
 	 * Updates the state of the cell with the prepared state
 	 */
 	public void updateState() {
-		pastStates.push(new PrevStateInfo(ticksOnCurrState, state));
-		
+		if (!Settings.isRecording())
+			pastStates.push(new PrevStateInfo(ticksOnCurrState, state));
+
 		if (state == nextState) {
 			if (ticksOnCurrState < state.getFadeFrames()) {
 				ticksOnCurrState++;
