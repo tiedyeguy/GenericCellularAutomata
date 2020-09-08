@@ -112,11 +112,9 @@ public class Grid {
 
 		neighbors = neighbors.stream().distinct().collect(Collectors.toList()); // Remove duplicates
 
-		if (!Settings.doesNeighborsIncludeSelf()) {
-			ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
-			justMeList.add(cells[cellZ][cellY][cellX]);
-			neighbors.removeAll(justMeList); // Remove Cell itself
-		}
+		ArrayList<Cell> justMeList = new ArrayList<Cell>(1);
+		justMeList.add(cells[cellZ][cellY][cellX]);
+		neighbors.removeAll(justMeList); // Remove Cell itself
 
 		Cell[] arr = new Cell[neighbors.size()];
 		return neighbors.toArray(arr);

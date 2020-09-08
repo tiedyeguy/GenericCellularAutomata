@@ -76,7 +76,7 @@ public class Cell {
 							firstTrueRule.toString() + "\n AND \n" + rule.toString() + " \nconflict with each other.");
 				} else {
 					firstTrueRule = rule;
-					nextState = rule.getState();
+					nextState = rule.getToState();
 				}
 			}
 		}

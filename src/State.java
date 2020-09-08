@@ -20,7 +20,7 @@ public class State implements Jsonable {
 	private char hotkey; 
 	private ArrayList<Rule> ruleset;
 	private boolean arrFormat;
-	
+
 	/**
 	 * Gets a list of all the states in this cellular automata
 	 * @return - List of state objects containing hotkey, color, user-given name, etc.
@@ -32,7 +32,7 @@ public class State implements Jsonable {
 	/**
 	 * Gets the state associated with given stateName
 	 * @param stateName - the user given name for this state
-	 * @return - State object containing name, color, hotkey, etc.
+	 * @return - State object containing name, color, hotkey, etc. Could be null if no such state exists
 	 */
 	public static State getState(String stateName) {
 		return states.get(stateName);
@@ -128,7 +128,7 @@ public class State implements Jsonable {
 	public int getFirstBlue() {
 		return blueF;
 	}
-	
+
 	/**
 	 * True iff this state fades from initial colors to final colors
 	 * @return - True if the state fades from getFirstRed()->getRed() and getFirstGreen()->getGreen() etc.
@@ -136,7 +136,7 @@ public class State implements Jsonable {
 	public boolean stateFades() {
 		return fades;
 	}
-	
+
 	/**
 	 * If stateFades() is true, this will represent the number of frames a state should take to transition from first colors to final
 	 * @return - Integer number of frames a state takes to fade, 3 if unspecified
@@ -144,7 +144,7 @@ public class State implements Jsonable {
 	public int getFadeFrames() {
 		return fadeFrames;
 	}
-	
+
 	/**
 	 * Sets the color of the state to specified value
 	 * @param color - the color of this state
@@ -189,55 +189,51 @@ public class State implements Jsonable {
 	 * Creates the ruleset for this cellular automata based on the given integer, for Rules1D automata
 	 * @param ruleNumber - The number that defines which rules this is
 	 */
-	public static void createRuleset(int ruleNumber) {
-		states = new HashMap<String, State>();
-		State liveState = new State("live");
-		liveState.setColor("FFFFFF", false);
-		State deadState = new State("default");
-
-		SimpleRule simpleRule = new SimpleRule(ruleNumber);
-
-		liveState.getRules().add(simpleRule);
-		deadState.getRules().add(simpleRule);
-		states.put("live", liveState);
-		states.put("default", deadState);
-	}
+//	public static void createRuleset(int ruleNumber) {
+//		states = new HashMap<String, State>();
+//		State liveState = new State("live");
+//		liveState.setColor("FFFFFF", false);
+//		State deadState = new State("default");
+//
+//		//		SimpleRule simpleRule = new SimpleRule(ruleNumber);
+//
+//		//		liveState.getRules().add(simpleRule);
+//		//		deadState.getRules().add(simpleRule);
+//		states.put("live", liveState);
+//		states.put("default", deadState);
+//	}
 
 	/**
 	 * Saves the ruleset as JSON
 	 * @return - JSON representation of all the rules
 	 */
 	public static JSONObject saveRuleset() {
-		if(Settings.isSimpleRuleset()) {
-			return states.get("default").getRules().get(0).saveToJson();
-		} else {
-			JSONObject ruleset = new JSONObject();
-			states.forEach((name, state)->ruleset.setJSONObject(name, state.saveToJson()));
-			return ruleset;
-		}
+		JSONObject ruleset = new JSONObject();
+		states.forEach((name, state)->ruleset.setJSONObject(name, state.saveToJson()));
+		return ruleset;
 	}
 
 	/**
 	 * Get rules for the specified state
 	 * @param s - A valid state for which rules exist
-	 * @return - An arraylist of Rule1Ds or ComplexRules that govern the transitioning of cells in given state
+	 * @return - An arraylist of Rules that govern the transitioning of cells in given state
 	 */
 	public ArrayList<Rule> getRules() {
 		return ruleset;
 	}
 
 	/**
-	 * Sets up the rules based on a JSONArray of complex rules
-	 * @param ruleArray - A JSONArray consisting of appropriately formatted complex rules
+	 * Sets up the rules based on a JSONArray of rules
+	 * @param ruleArray - A JSONArray consisting of appropriately formatted rules
 	 */
 	private void loadRules(JSONArray ruleArray) {
 		for(int i = 0; i < ruleArray.size(); i++) {
 			JSONObject ruleObject = ruleArray.getJSONObject(i);
 			String toState = (String)ruleObject.remove("toState");;
-			ruleset.add(new ComplexRule(ruleObject, State.getState(toState)));
+			ruleset.add(Rule.makeRule(ruleObject, State.getState(toState)));
 		}
 	}
-	
+
 	@Override
 	public void loadFromJSON(JSONObject jsonable) {
 		arrFormat = false;
@@ -256,7 +252,7 @@ public class State implements Jsonable {
 				loadRules(jsonable.getJSONArray(stateAttributeName));
 			}
 			else {
-				ruleset.add(new ComplexRule(jsonable.getJSONObject(stateAttributeName), State.getState(stateAttributeName)));					
+				ruleset.add(Rule.makeRule(jsonable.getJSONObject(stateAttributeName), State.getState(stateAttributeName)));					
 			}
 		}
 	}
@@ -273,16 +269,20 @@ public class State implements Jsonable {
 		stateJson.setString("hotkey", ""+hotkey);
 		if(arrFormat) {
 			JSONArray rules = new JSONArray();
-			ruleset.forEach((rule)->{
-				
-			});
+			int i = 0;
+			for(Rule rule : ruleset) {
+				JSONObject ruleObj = rule.saveToJson();
+				ruleObj.setString("toState", rule.getToState().getName());
+				rules.setJSONObject(i, ruleObj);
+				i++;
+			}
 			stateJson.setJSONArray("rules", rules);
 		} else
-			ruleset.forEach((rule)->stateJson.setJSONObject(rule.getState().getName(),rule.saveToJson()));
-		
+			ruleset.forEach((rule)->stateJson.setJSONObject(rule.getToState().getName(),rule.saveToJson()));
+
 		return stateJson;
 	}
-	
+
 	public String toString() {
 		String stateString = "State " + getName() + "\n";
 		if(stateFades())

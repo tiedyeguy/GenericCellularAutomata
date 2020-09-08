@@ -78,8 +78,13 @@ public class Driver extends PApplet {
 			return;
 		}
 
-		JSONObject automataObj = JSONObject.parse(jsonAsStr);
-		setupAutomata(automataObj);
+		try {
+			JSONObject automataObj = JSONObject.parse(jsonAsStr);
+			setupAutomata(automataObj);
+		} catch(RuntimeException ex) {
+			System.err.println("The JSON file that you are attempting to run is not formatted correctly");
+			ex.printStackTrace();
+		}
 	}
 
 	/**
@@ -135,7 +140,6 @@ public class Driver extends PApplet {
 		textSize(40);
 		// TODO rendering without stroke is about 3 times faster - include option?
 
-		// TODO save initial state
 		if (Settings.isRecording()) {
 			speed = 0;
 		}

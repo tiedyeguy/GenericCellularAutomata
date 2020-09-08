@@ -1,12 +1,45 @@
 {
-    "initial_state": [
-     {"x":0, "y":0, "state": "live"}],
+  "initial_state": [
+    {
+      "x": 49,
+      "state": "live"
+    }
+  ],
   "size": {
-    "x": 50
+    "x": 100
   },
-  "type": "M",
   "dimensions": "1-time",
   "time-depth": 20,
   "wrap": false,
-  "rules": 90
+  "rules": {
+    "live": {
+      "color": "FFFFFF",
+      "rules": [
+        {
+          "left": "live",
+          "right": "live",
+          "toState": "default"
+        },
+        {
+          "left": "default",
+          "right": "default",
+          "toState": "default"
+        }
+      ]
+    },
+    "default": {
+      "rules": [
+        {
+          "left": "default",
+          "right": "live",
+          "toState": "live"
+        },
+        {
+          "left": "live",
+          "right": "default",
+          "toState": "live"
+        }
+      ]
+    }
+  }
 }

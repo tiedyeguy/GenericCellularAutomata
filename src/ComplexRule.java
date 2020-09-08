@@ -11,10 +11,9 @@ import processing.data.JSONObject;
 public class ComplexRule extends Rule {
 	private Map<State, Range> stateThresholds;
 	private Range anyButDefault;
-	private State nextState;
 	
 	public ComplexRule(JSONObject ruleObject, State nextState) {
-		this.nextState = nextState;
+		super(nextState);
 		stateThresholds = new HashMap<State, Range>();
 		
 		loadFromJSON(ruleObject);
@@ -55,12 +54,6 @@ public class ComplexRule extends Rule {
 	}
 
 	@Override
-	public State getState() {
-		return nextState;
-	}
-
-
-	@Override
 	public JSONObject saveToJson() {
 		JSONObject jsonRule = new JSONObject();
 		
@@ -92,7 +85,7 @@ public class ComplexRule extends Rule {
 	
 	@Override
 	public String toString() {
-		String strThresholds = "Complex Rule: Transitions to State: " + nextState.getName() + "\n";
+		String strThresholds = "Complex Rule: Transitions to State: " + getToState().getName() + "\n";
 		for(Entry<State, Range> e : stateThresholds.entrySet()) {
 			strThresholds += "\t" + e.getKey().getName() + ":" + e.getValue() + "\n";
 		}

@@ -22,16 +22,12 @@ public class Settings {
 	private static int ySize;
 	//The z dimension of the grid, 1 if one or two dimensional
 	private static int zSize;
-	//Represents whether this ruleset is 'simple' or 'complex', complex rules have more than two discrete states while simple rulesets are represented by integers
-	private static boolean isSimple;
 	//Represents the depth for the past if grid history is displayed
 	private static int time_depth;
 	//The number of frames to record in a video, -1 if not recording
 	private static int framesToRecord;
 	//The speed of a recording in frames per second, -1 if not recording
 	private static int frameSpeed;
-	//True if the neighbors array includes itself, default false
-	private static boolean neighborsIncludeSelf;
 	//The name of the video if recording
 	private static String videoName;
 	
@@ -41,20 +37,11 @@ public class Settings {
 	 * @return - Returns the array of the initial state, to be fed into the grid
 	 */
 	public static JSONArray init(JSONObject automataObj) {
-		Settings.neighborsIncludeSelf = automataObj.getBoolean("neighbors-include-self", false);
-		try {
-			State.createRuleset(automataObj.getJSONObject("rules"));	
-			Settings.isSimple = false;
-		} catch(RuntimeException e) {
-			State.createRuleset(automataObj.getInt("rules", 0));
-			Settings.neighborsIncludeSelf = true;
-			Settings.isSimple = true;
-		}
-
 		Settings.wrapping = automataObj.getBoolean("wrap");
 		Settings.dimension = Dimension.valueOfLabel(automataObj.getString("dimensions", "2"));
 		Settings.neighborType = NeighborType.typeOfChar((automataObj.getString("type", "M")).toLowerCase().charAt(0));
 		JSONObject size = automataObj.getJSONObject("size");
+		State.createRuleset(automataObj.getJSONObject("rules"));	
 		Settings.xSize = size.getInt("x", 1);
 		Settings.ySize = size.getInt("y", 1);
 		Settings.zSize = size.getInt("z", 1);
@@ -116,14 +103,6 @@ public class Settings {
 	}
 
 	/**
-	 * A simple ruleset is one represented by a binary string, consists of two states. Complex rulesets are game of life, wire world, etc.
-	 * @return - True iff the ruleset is a simple ruleset (requires cells to be in their own neighbor array), false if complex (cell not included in neighbor array)
-	 */
-	public static boolean isSimpleRuleset() {
-		return isSimple;
-	}
-
-	/**
 	 * Gets the frame speed of the video recording in FPS
 	 * @return - Integer FPS, -1 if not recording
 	 */
@@ -153,14 +132,6 @@ public class Settings {
 	 */
 	public static String getVideoName() {
 		return videoName;
-	}
-	
-	/**
-	 * Does the neighbors array of a cell include the cell itself
-	 * @return - true iff neighbors array should include itself
-	 */
-	public static boolean doesNeighborsIncludeSelf() {
-		return neighborsIncludeSelf;
 	}
 	
 	/**
@@ -208,17 +179,13 @@ public class Settings {
 		if(dimension.isTimed()) {
 			savedJSON.setInt("time-depth", time_depth);
 		}
-		savedJSON.setString("neighborType", ""+neighborType.type);
-		if(!isSimple)
-			savedJSON.setJSONObject("rules", State.saveRuleset());
-		else
-			savedJSON.setString("rules", State.saveRuleset().getString("rules"));
+		savedJSON.setString("type", ""+neighborType.type);
+		savedJSON.setJSONObject("rules", State.saveRuleset());
 		if(Settings.frameSpeed != -1) {
 			savedJSON.setInt("record-frames", framesToRecord);
 			savedJSON.setInt("video-speed", frameSpeed);
 			savedJSON.setString("video-name", videoName);
 		}
-		savedJSON.setBoolean("neighbors-includes-self", neighborsIncludeSelf);
 		JSONArray initialState = g.getJsonArray();
 		if(initialState != null)
 			savedJSON.setJSONArray("initial_state", initialState);
@@ -233,10 +200,8 @@ public class Settings {
 		String settingsString = "Program Settings\n";
 		settingsString += "Wrap: " + wrapping + "\n";
 		settingsString += "Dimension: " + dimension.value + "\n";
-		settingsString += "Neighbor Type: " + neighborType.type + 
-				(neighborsIncludeSelf ? " (includes self) " : " (does not include self)") + "\n";
+		settingsString += "Neighbor Type: " + neighborType.type + "\n";
 		settingsString += "Size: (" + xSize + ", " + ySize + ", " + zSize + ")\n";
-		settingsString += "Simple Rules: " + isSimple + "\n";
 		settingsString += "Time Depth: " + time_depth + "\n";
 		settingsString += "Is Recording: " + isRecording() + "\n";
 		settingsString += "\tVideo Speed: " + frameSpeed + "fps \n";
