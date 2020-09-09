@@ -10,58 +10,39 @@ import processing.data.JSONObject;
  */
 public class ComplexRule extends Rule {
 	private Map<State, Range> stateThresholds;
-	private Range anyButDefault;
-	
 	public ComplexRule(JSONObject ruleObject, State nextState) {
 		super(nextState);
 		stateThresholds = new HashMap<State, Range>();
-		
+
 		loadFromJSON(ruleObject);
 	}
 
-	
+
 	@Override
 	public boolean isTrue(Cell[] neighbors) {
-		if(anyButDefault == null) {
-			Map<State, Number> neighborCounts = new HashMap<State, Number>();
-			for (Cell neighbor : neighbors) {
-				if (neighborCounts.containsKey(neighbor.getState())) {
-					neighborCounts.put(neighbor.getState(), neighborCounts.get(neighbor.getState()).intValue() + 1);
-				} else {
-					neighborCounts.put(neighbor.getState(), 1);
-				}
-			}
-
-			for(State discreteState : stateThresholds.keySet()) {
-				if(!stateThresholds.get(discreteState).contains(neighborCounts.getOrDefault(discreteState, 0)))
-					return false;
-			}
-			return true;
-		} else {
-			int nonDeadCount = 0;
-			State deadState = State.getState("default");
-			for(Cell neighbor : neighbors) {
-				if(!neighbor.getState().equals(deadState))
-					nonDeadCount++;
-			}
-			
-			if(anyButDefault.contains(nonDeadCount)) {
-				return true;
+		Map<State, Number> neighborCounts = new HashMap<State, Number>();
+		for (Cell neighbor : neighbors) {
+			if (neighborCounts.containsKey(neighbor.getState())) {
+				neighborCounts.put(neighbor.getState(), neighborCounts.get(neighbor.getState()).intValue() + 1);
 			} else {
-				return false;
+				neighborCounts.put(neighbor.getState(), 1);
 			}
 		}
+
+		for(State discreteState : stateThresholds.keySet()) {
+			if(!stateThresholds.get(discreteState).contains(neighborCounts.getOrDefault(discreteState, 0)))
+				return false;
+		}
+		return true;
 	}
 
 	@Override
 	public JSONObject saveToJson() {
 		JSONObject jsonRule = new JSONObject();
-		
+
 		for(State state: stateThresholds.keySet()) {
 			jsonRule.setString(state.getName(), stateThresholds.get(state).toString());
 		}
-		if(anyButDefault != null)
-			jsonRule.setString("any", anyButDefault.toString());
 		return jsonRule;
 	}
 
@@ -71,26 +52,20 @@ public class ComplexRule extends Rule {
 		for(Object threshold: jsonable.keys()) {
 			String thresholdName = (String)threshold;
 			State ruleState = State.getState(thresholdName);
-			if(ruleState != null)
+			if(ruleState != null) {
 				stateThresholds.put(ruleState, new Range(jsonable.getString(thresholdName)));
-			else if(thresholdName.equalsIgnoreCase("any")) {
-				Range validRange = new Range(jsonable.getString(thresholdName));
-				anyButDefault = validRange;
 			} else {
 				System.err.println("THERE WAS A PROBLEM " + thresholdName + " : "+ jsonable.getString(thresholdName) 
-						+ " DOES NOT REFERENCE VALID STATE");
+				+ " DOES NOT REFERENCE VALID STATE");
 			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		String strThresholds = "Complex Rule: Transitions to State: " + getToState().getName() + "\n";
 		for(Entry<State, Range> e : stateThresholds.entrySet()) {
 			strThresholds += "\t" + e.getKey().getName() + ":" + e.getValue() + "\n";
-		}
-		if(anyButDefault != null) {
-			strThresholds += "\t" + anyButDefault + "/n";
 		}
 		return strThresholds;
 	}

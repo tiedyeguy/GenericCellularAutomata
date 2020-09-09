@@ -42,7 +42,10 @@ public class Cell {
 	}
 
 	public String toString() {
-		return state.getName();
+		String n = state.getName() + "\n";
+		for(Cell neighbor : neighbors)
+			n += neighbor.getState().getName();
+		return n;
 	}
 
 	@SuppressWarnings("unchecked")

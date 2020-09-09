@@ -186,8 +186,12 @@ public class Grid {
 	public void prepareAllStates() {
 		for (int z = 0; z < cells.length; z++)
 			for (int y = 0; y < cells[z].length; y++)
-				for (int x = 0; x < cells[z][y].length; x++)
+				for (int x = 0; x < cells[z][y].length; x++) {
+//					if(y == 9 && x == 12) {
+//						System.out.println(cells[z][y][x].toString());
+//					}
 					cells[z][y][x].prepareNextState();
+				}
 	}
 
 	/**

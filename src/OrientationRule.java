@@ -42,7 +42,7 @@ public class OrientationRule extends Rule {
 			orientedArray[3] = State.getState(jsonable.getString("bottom", "*"));
 		} else if(Settings.getDimension().getDimensionNumber() == 1) {
 			orientedArray[0] = State.getState(jsonable.getString("left", "*"));
-			orientedArray[1] = State.getState(jsonable.getString("right", "*"));			
+			orientedArray[1] = State.getState(jsonable.getString("right", "*"));		
 		}
 		symmetric = jsonable.getBoolean("symmetric", false);
 	}
